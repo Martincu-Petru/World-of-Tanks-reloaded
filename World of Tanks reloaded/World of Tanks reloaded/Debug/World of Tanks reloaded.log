@@ -1,3 +1,22 @@
-﻿  main.cpp
+﻿  Player.cpp
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(6): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(7): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(36): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(37): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(135): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(139): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(143): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(147): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(152): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(159): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.cpp(164): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+  main.cpp
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(49): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(64): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(66): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
   World of Tanks reloaded.vcxproj -> C:\Users\Petru\Documents\GitHub\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.exe
   World of Tanks reloaded.vcxproj -> C:\Users\Petru\Documents\GitHub\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.pdb (Full PDB)
