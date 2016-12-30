@@ -81,9 +81,13 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::W))
 				mainTank.movePlayer('u', 0.5);
 			else if (Keyboard::isKeyPressed(Keyboard::A))
+			{
 				mainTank.movePlayer('l', 0.5);
+			}
 			else if (Keyboard::isKeyPressed(Keyboard::D))
+			{
 				mainTank.movePlayer('r', 0.5);
+			}
 			else if (Keyboard::isKeyPressed(Keyboard::S))
 				mainTank.movePlayer('d', 0.5);
 		}
