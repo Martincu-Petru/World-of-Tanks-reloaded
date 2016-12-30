@@ -1,9 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <random>
-#include <iostream>
 #include "Player.h"
-//217
 using namespace sf;
 using namespace std;
 
@@ -11,6 +9,8 @@ int main()
 {
 
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
+	mainScreen.setKeyRepeatEnabled(true);
+	Player mainTank("E-100.png");
 
 	Event Event;
 
@@ -75,15 +75,23 @@ int main()
 				plane2Active = false;
 		}
 
-		while (mainScreen.pollEvent(Event))
+		while (mainScreen.pollEvent(Event)) {
 			if (Event.type == Event::EventType::Closed)
 				mainScreen.close();
+			if (Keyboard::isKeyPressed(Keyboard::W))
+				mainTank.movePlayer('u', 0.5);
+			else if (Keyboard::isKeyPressed(Keyboard::A))
+				mainTank.movePlayer('l', 0.5);
+			else if (Keyboard::isKeyPressed(Keyboard::D))
+				mainTank.movePlayer('r', 0.5);
+			else if (Keyboard::isKeyPressed(Keyboard::S))
+				mainTank.movePlayer('d', 0.5);
+		}
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
+		mainTank.drawPlayer(mainScreen);
 		mainScreen.draw(plane);
 		mainScreen.draw(plane2);
-
-
 		mainScreen.display();
 	}
 }
