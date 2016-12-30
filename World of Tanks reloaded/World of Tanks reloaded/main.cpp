@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <random>
 #include "Player.h"
+
 using namespace sf;
 using namespace std;
 
@@ -37,6 +38,8 @@ int main()
 	plane2.scale(0.3f, 0.3f);
 	bool plane2Active = false;
 	float plane2Speed = 0.0f;
+
+
 
 	while (mainScreen.isOpen())
 	{
@@ -75,21 +78,19 @@ int main()
 				plane2Active = false;
 		}
 
-		while (mainScreen.pollEvent(Event)) {
+		while (mainScreen.pollEvent(Event)) 
+		{
 			if (Event.type == Event::EventType::Closed)
 				mainScreen.close();
-			if (Keyboard::isKeyPressed(Keyboard::W))
-				mainTank.movePlayer('u', 0.5);
-			else if (Keyboard::isKeyPressed(Keyboard::A))
-			{
-				mainTank.movePlayer('l', 0.5);
-			}
+			if (Keyboard::isKeyPressed(Keyboard::S))
+				mainTank.movePlayer('u', 1.5); //era 0.5 peste tot dar tancul se misca prea incet
 			else if (Keyboard::isKeyPressed(Keyboard::D))
-			{
-				mainTank.movePlayer('r', 0.5);
-			}
-			else if (Keyboard::isKeyPressed(Keyboard::S))
-				mainTank.movePlayer('d', 0.5);
+				mainTank.movePlayer('l', 1.5);
+			else if (Keyboard::isKeyPressed(Keyboard::A))
+				mainTank.movePlayer('r', 1.5);
+			else if (Keyboard::isKeyPressed(Keyboard::W))
+				mainTank.movePlayer('d', 1.5);
+
 		}
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);

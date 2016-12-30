@@ -2,16 +2,15 @@
 
 #include <iostream>
 #include <SFML\Graphics.hpp>
+#include <math.h>
 
 using namespace sf;
 using namespace std;
 
-float rotation;
-
 class Player
 {
 public:
-	Player() 
+	Player()
 	{
 		//Default constructor
 	}
@@ -30,25 +29,26 @@ public:
 	void movePlayer(char direction, float moveSpeed)
 	{
 		if (direction == 'u')
-			playerSprite.move(0, -moveSpeed);
+		{
+			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-3, cos(playerSprite.getRotation()*3.14159265 / 180) * 3);
+		}
 		else
 			if (direction == 'd')
-				playerSprite.move(0, moveSpeed);
+			{
+				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * 3, cos(playerSprite.getRotation()*3.14159265 / 180)*-3);
+			}
 			else
 				if (direction == 'l')
 				{
 					playerSprite.rotate(1);
-					//playerSprite.move(-moveSpeed, 0);
 				}
 				else
 					if (direction == 'r')
 					{
 						playerSprite.rotate(-1);
-						//playerSprite.move(moveSpeed, 0);
 					}
 	}
 private:
-
 	Texture playerTexture;
 	Sprite playerSprite;
 };
