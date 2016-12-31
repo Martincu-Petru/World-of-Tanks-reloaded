@@ -25,6 +25,7 @@ int main()
 
 	Texture planeTexture;
 	planeTexture.loadFromFile("Ao192.png");
+	planeTexture.setSmooth(true);
 	Sprite plane;
 	plane.setTexture(planeTexture);
 	plane.scale(0.3f, 0.3f);
@@ -33,6 +34,7 @@ int main()
 
 	Texture plane2Texture;
 	plane2Texture.loadFromFile("Bf110e.png");
+	plane2Texture.setSmooth(true);
 	Sprite plane2;
 	plane2.setTexture(plane2Texture);
 	plane2.scale(0.3f, 0.3f);
