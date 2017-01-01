@@ -2,9 +2,12 @@
 #include <SFML/Graphics/Image.hpp>
 #include <random>
 #include "Player.h"
-
+#include "bullet.h"
+//#include "ai_Entity.h"
+;
 using namespace sf;
 using namespace std;
+
 
 int main()
 {
@@ -12,6 +15,34 @@ int main()
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	mainScreen.setKeyRepeatEnabled(true);
 	Player mainTank("E-100.png");
+
+	//from here
+
+	//ai_Entity mainAI("E-100.png");
+
+	// 100 bullets should do
+	Bullet bullets[100];
+	int currentBullet = 0;
+	int bulletsSpare = 24;
+	int bulletsInClip = 6;
+	int clipSize = 6;
+	float fireRate = 1;
+
+	// When was the fire button last pressed?
+	Time lastPressed;
+	Time gameTimeTotal;
+
+	// Where is the mouse in relation to world coordinates
+	Vector2f mouseWorldPosition;
+
+	// Where is the mouse in relation to screen coordinates
+	Vector2i mouseScreenPosition;
+
+	// Make a decimal fraction of 1 from the delta time
+	Time dt;
+	float dtAsSeconds = dt.asSeconds();
+
+	//to here
 
 	Event Event;
 
@@ -82,6 +113,8 @@ int main()
 
 		while (mainScreen.pollEvent(Event)) 
 		{
+			//mainAI.BuildPathToTarget();
+
 			if (Event.type == Event::EventType::Closed)
 				mainScreen.close();
 			if (Keyboard::isKeyPressed(Keyboard::S))
@@ -93,12 +126,48 @@ int main()
 			else if (Keyboard::isKeyPressed(Keyboard::W))
 				mainTank.movePlayer('d', 1.5);
 
+			//from here
+			// Fire a bullet
+			int ok = 0;
+			if (Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds()> 1000 / fireRate && bulletsInClip > 0)
+				{
+					// Pass the center of the player and the center of the crosshair to the shoot function
+					bullets[currentBullet].shoot( mainTank.getXorigin() , mainTank.getYorigin() , mouseWorldPosition.x , mouseWorldPosition.y );
+					currentBullet++;
+					if (currentBullet > 99)
+					{
+						currentBullet = 0;
+					}
+					lastPressed = gameTimeTotal;
+					bulletsInClip--;
+				}
+			}// End fire a bullet
+
+			 // Update any bullets that are in-flight
+			for (int i = 0; i < 100; i++)
+			{
+				if (bullets[i].isInFlight())
+				{
+					bullets[i].update(dtAsSeconds);
+				}
+			}
+			//to here
 		}
+
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
 		mainTank.drawPlayer(mainScreen);
 		mainScreen.draw(plane);
 		mainScreen.draw(plane2);
+		for (int i = 0; i < 100; i++)
+		{
+			if (bullets[i].isInFlight())
+			{
+				mainScreen.draw(bullets[i].getShape());
+			}
+		}
 		mainScreen.display();
 	}
 }
