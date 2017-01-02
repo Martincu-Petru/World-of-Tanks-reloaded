@@ -16,6 +16,8 @@ public:
 	}
 	Player(string imageName)
 	{
+		currentHealth = 100;
+		maxHealth = 100;
 		if (!playerTexture.loadFromFile(imageName))
 			cerr << "Error" << endl;
 		playerTexture.setSmooth(true);
@@ -32,22 +34,22 @@ public:
 	{
 		if (direction == 'u')
 		{
-			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-3, cos(playerSprite.getRotation()*3.14159265 / 180) * 3);
+			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-moveSpeed, cos(playerSprite.getRotation()*3.14159265 / 180) * moveSpeed);
 		}
 		else
 			if (direction == 'd')
 			{
-				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * 3, cos(playerSprite.getRotation()*3.14159265 / 180)*-3);
+				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * moveSpeed, cos(playerSprite.getRotation()*3.14159265 / 180)*-moveSpeed);
 			}
 			else
 				if (direction == 'l')
 				{
-					playerSprite.rotate(1);
+					playerSprite.rotate(moveSpeed-0.25);
 				}
 				else
 					if (direction == 'r')
 					{
-						playerSprite.rotate(-1);
+						playerSprite.rotate(-moveSpeed+0.25);
 					}
 		if (playerSprite.getPosition().y + playerSprite.getGlobalBounds().height*0.5 > VideoMode::getDesktopMode().height)
 			playerSprite.setPosition(Vector2f(playerSprite.getPosition().x, VideoMode::getDesktopMode().height - playerSprite.getGlobalBounds().height*0.5));
@@ -61,7 +63,29 @@ public:
 		if (playerSprite.getPosition().x - playerSprite.getGlobalBounds().width*0.5 < 0)
 			playerSprite.setPosition(Vector2f(playerSprite.getGlobalBounds().width*0.5, playerSprite.getPosition().y));
 	}
+	int getHealth() {
+		return currentHealth;
+	}
+	Time getLastHitTime() {
+		return lastHit;
+	}
+	bool hit(Time timeHit)
+	{
+		if (timeHit.asMilliseconds() - lastHit.asMilliseconds() > 200)
+		{
+			lastHit = timeHit;
+			currentHealth -= 10;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 private:
 	Texture playerTexture;
 	Sprite playerSprite;
-};
+	int currentHealth;
+	int maxHealth;
+	Time lastHit;
+}; 

@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <random>
 #include "Player.h"
+#include <iostream>
 
 using namespace sf;
 using namespace std;
@@ -16,6 +17,13 @@ int main()
 	Event Event;
 
 	Clock tictoc;
+
+	Texture healthBarTexture;
+	healthBarTexture.loadFromFile("HP.png");
+	Sprite HP;
+	HP.setTexture(healthBarTexture);
+	HP.setPosition(1000, 20);
+	HP.setScale(0.4f, 0.4f);
 
 	Texture textureBackground;
 	textureBackground.loadFromFile("intro.jpg");
@@ -41,7 +49,9 @@ int main()
 	bool plane2Active = false;
 	float plane2Speed = 0.0f;
 
-
+	RectangleShape healthBar;
+	healthBar.setFillColor(Color(120,201,32));
+	healthBar.setPosition(1070, 30);
 
 	while (mainScreen.isOpen())
 	{
@@ -82,16 +92,17 @@ int main()
 
 		while (mainScreen.pollEvent(Event)) 
 		{
+			healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
 			if (Event.type == Event::EventType::Closed)
 				mainScreen.close();
 			if (Keyboard::isKeyPressed(Keyboard::S))
-				mainTank.movePlayer('u', 1.5); //era 0.5 peste tot dar tancul se misca prea incet
+				mainTank.movePlayer('u', 0.75); //era 1.5 peste tot dar tancul se misca prea repede
 			else if (Keyboard::isKeyPressed(Keyboard::D))
-				mainTank.movePlayer('l', 1.5);
+				mainTank.movePlayer('l', 0.75);
 			else if (Keyboard::isKeyPressed(Keyboard::A))
-				mainTank.movePlayer('r', 1.5);
+				mainTank.movePlayer('r', 0.75);
 			else if (Keyboard::isKeyPressed(Keyboard::W))
-				mainTank.movePlayer('d', 1.5);
+				mainTank.movePlayer('d', 0.75);
 
 		}
 		mainScreen.clear();
@@ -99,6 +110,8 @@ int main()
 		mainTank.drawPlayer(mainScreen);
 		mainScreen.draw(plane);
 		mainScreen.draw(plane2);
+		mainScreen.draw(healthBar);
+		mainScreen.draw(HP);
 		mainScreen.display();
 	}
 }
