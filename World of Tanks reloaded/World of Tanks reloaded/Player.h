@@ -30,6 +30,14 @@ public:
 		playerSprite.setScale(0.25f, 0.25f);
 		screen.draw(playerSprite);
 	}
+	float getXorigin()
+	{
+		return playerSprite.getOrigin().x;
+	}
+	float getYorigin()
+	{
+		return playerSprite.getOrigin().y; 
+	}
 	void movePlayer(char direction, float moveSpeed)
 	{
 		if (direction == 'u')
