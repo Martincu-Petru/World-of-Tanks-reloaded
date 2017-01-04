@@ -4,7 +4,7 @@
 #include "Player.h"
 #include <iostream>
 #include "bullet.h"
-#include <sstream> //#include "ai_Entity.h"
+#include <sstream> 
 #include "Pickup.h"
 using namespace sf;
 using namespace std;
@@ -16,34 +16,9 @@ int main()
 	mainScreen.setKeyRepeatEnabled(true);
 	Player mainTank("E-100.png");
 
-	//from here
-
-	//ai_Entity mainAI("E-100.png");
-
-	// 100 bullets should do
-	Bullet bullets[100];
-	int currentBullet = 0;
-	int bulletsSpare = 24;
-	int bulletsInClip = 6;
-	int clipSize = 6;
-	float fireRate = 1;
-
-	// When was the fire button last pressed?
-	Time lastPressed;
-	Time gameTimeTotal;
-
-	// Where is the mouse in relation to world coordinates
-	Vector2f mouseWorldPosition;
-
-	// Where is the mouse in relation to screen coordinates
-	Vector2i mouseScreenPosition;
-
-	// Make a decimal fraction of 1 from the delta time
-	Time dt;
-	float dtAsSeconds = dt.asSeconds();
-
-	//to here
-
+	// 2 bullets should do
+	Bullet bullets[2];
+	int currentBullet = 0, i;
 	
 	//Pickup ammoPickup(2);
 
@@ -141,50 +116,71 @@ int main()
 				plane2Active = false;
 		}
 
-		while (mainScreen.pollEvent(Event)) 
-		{
+		//while (mainScreen.pollEvent(Event)) 
+		//{
 			healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
-			//mainAI.BuildPathToTarget();
-			if (Event.type == Event::EventType::Closed)
-				mainScreen.close();
-			if (Keyboard::isKeyPressed(Keyboard::S))
-				mainTank.movePlayer('u', 0.75); 
-			else if (Keyboard::isKeyPressed(Keyboard::D))
-				mainTank.movePlayer('l', 0.75);
-			else if (Keyboard::isKeyPressed(Keyboard::A))
-				mainTank.movePlayer('r', 0.75);
-			else if (Keyboard::isKeyPressed(Keyboard::W))
-				mainTank.movePlayer('d', 0.75);
 
-			//from here
-			// Fire a bullet
-			int ok = 0;
-			if (Mouse::isButtonPressed(sf::Mouse::Left))
+			//first we have to handle the player's input
+			if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
 			{
-				if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds()> 1000 / fireRate && bulletsInClip > 0)
+				cout << endl << " DA " << endl;
+				mainTank.movePlayer('u', 0.75); //era 1.5 peste tot dar tancul se misca prea repede
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
+			{
+				mainTank.movePlayer('l', 0.75);
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
+			{
+				mainTank.movePlayer('r', 0.75);
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
+			{
+				mainTank.movePlayer('d', 0.75);
+			}
+
+			// Fire a bullet
+			if (Keyboard::isKeyPressed(Keyboard::Space))
+			{
+				if (bullets[currentBullet].isInFlight() != true)
 				{
-					// Pass the center of the player and the center of the crosshair to the shoot function
-					bullets[currentBullet].shoot( mainTank.getXorigin() , mainTank.getYorigin() , mouseWorldPosition.x , mouseWorldPosition.y );
+
+					//the next section will calculate the direction in which the bullet is fired
+					double xOrigin;
+					double yOrigin;
+					double rotation = (double)mainTank.rotationOfPlayer();
+					unsigned int X = mainTank.xMaxim();
+					unsigned int Y = mainTank.yMaxim();
+					float tankX = mainTank.getXorigin();
+					float tankY = mainTank.getYorigin();
+					bullets[currentBullet].thirdPoint(tankX, tankY, rotation, xOrigin, yOrigin, X, Y);
+
+					bullets[currentBullet].shoot(tankX, tankY, xOrigin, yOrigin);
 					currentBullet++;
-					if (currentBullet > 99)
+					if (currentBullet > 1)
 					{
 						currentBullet = 0;
 					}
-					lastPressed = gameTimeTotal;
-					bulletsInClip--;
 				}
-			}// End fire a bullet
 
-			 // Update any bullets that are in-flight
-			for (int i = 0; i < 100; i++)
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				mainScreen.close();
+			}
+
+
+			// Actualizarea pt bullets in-flight
+			for (i = 0; i < 2; i++)
 			{
 				if (bullets[i].isInFlight())
 				{
-					bullets[i].update(dtAsSeconds);
+					bullets[i].update(0.250);
 				}
 			}
-			//to here
-		}
+
+		//}
 
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
@@ -211,7 +207,7 @@ int main()
 		mainScreen.draw(healthBarEmpty);
 		mainScreen.draw(healthBar);
 		mainScreen.draw(HP);
-		for (int i = 0; i < 100; i++)
+		for (i = 0; i < 2; ++i)
 		{
 			if (bullets[i].isInFlight())
 			{

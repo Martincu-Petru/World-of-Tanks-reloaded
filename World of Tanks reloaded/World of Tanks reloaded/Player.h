@@ -90,6 +90,18 @@ public:
 			return false;
 		}
 	}
+	unsigned int xMaxim()
+	{
+		return VideoMode::getDesktopMode().width;
+	}
+	unsigned int yMaxim()
+	{
+		return VideoMode::getDesktopMode().height;
+	}
+	float rotationOfPlayer()
+	{
+		return playerSprite.getRotation();
+	}
 private:
 	Texture playerTexture;
 	Sprite playerSprite;
