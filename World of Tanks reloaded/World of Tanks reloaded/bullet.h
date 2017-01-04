@@ -118,4 +118,4 @@ public:
 			m_InFlight = false;
 		}
 	}
-}
+};

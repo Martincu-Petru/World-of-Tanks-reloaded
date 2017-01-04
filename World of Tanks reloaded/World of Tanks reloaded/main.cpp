@@ -4,10 +4,10 @@
 #include "Player.h"
 #include <iostream>
 #include "bullet.h"
-//#include "ai_Entity.h"
-; using namespace sf;
+#include <sstream> //#include "ai_Entity.h"
+#include "Pickup.h"
+using namespace sf;
 using namespace std;
-
 
 int main()
 {
@@ -44,48 +44,69 @@ int main()
 
 	//to here
 
+	
+	//Pickup ammoPickup(2);
+
 	Event Event;
+	Clock tictoc, elapsed;;
+	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture;
+	Sprite HP, spriteBackground, stone0, plane, plane2;
+	RectangleShape healthBar, healthBarEmpty;
+	Text healthLevel;
+	Font fontHealth;
+	bool planeActive = false, plane2Active = false;
+	float planeSpeed = 0.0f, plane2Speed = 0.0f;
+	int health = mainTank.getHealth();
 
-	Clock tictoc;
-
-	Texture healthBarTexture;
 	healthBarTexture.loadFromFile("HP.png");
-	Sprite HP;
-	HP.setTexture(healthBarTexture);
-	HP.setPosition(1000, 20);
-	HP.setScale(0.4f, 0.4f);
-
-	Texture textureBackground;
-	textureBackground.loadFromFile("intro.jpg");
-	Sprite spriteBackground;
-	spriteBackground.setTexture(textureBackground);
-	spriteBackground.setPosition(0, 0);
-
-	Texture planeTexture;
 	planeTexture.loadFromFile("Ao192.png");
-	planeTexture.setSmooth(true);
-	Sprite plane;
-	plane.setTexture(planeTexture);
-	plane.scale(0.3f, 0.3f);
-	bool planeActive = false;
-	float planeSpeed = 0.0f;
-
-	Texture plane2Texture;
+	textureBackground.loadFromFile("intro.jpg");
+	stone.loadFromFile("stone.png");
 	plane2Texture.loadFromFile("Bf110e.png");
-	plane2Texture.setSmooth(true);
-	Sprite plane2;
+	fontHealth.loadFromFile("Font.ttf");
+
+
+	HP.setTexture(healthBarTexture);
+	spriteBackground.setTexture(textureBackground);
+	stone0.setTexture(stone);
+	plane.setTexture(planeTexture);
 	plane2.setTexture(plane2Texture);
-	plane2.scale(0.3f, 0.3f);
-	bool plane2Active = false;
-	float plane2Speed = 0.0f;
 
-	RectangleShape healthBar;
-	healthBar.setFillColor(Color(120,201,32));
+
+	HP.setPosition(1000, 20);
+	stone0.setPosition(100, 550);
+	spriteBackground.setPosition(0, 0);
 	healthBar.setPosition(1070, 30);
+	plane2.scale(0.3f, 0.3f);
+	healthBarEmpty.setPosition(1070, 30);
 
-	while (mainScreen.isOpen())
-	{
+
+	HP.setScale(0.4f, 0.4f); 
+	plane.scale(0.3f, 0.3f);
+
+	planeTexture.setSmooth(true);
+	plane2Texture.setSmooth(true);
+
+	healthBar.setFillColor(Color(120,201,32));
+
+	healthBarEmpty.setFillColor(Color(255, 0, 0, 200));
+	healthBarEmpty.setSize(Vector2f(260, 30));
+
+	healthLevel.setFont(fontHealth);
+	healthLevel.setCharacterSize(30);
+	healthLevel.setFillColor(Color::White);
+
+	Pickup healthPickup(1);
+
+	healthPickup.spawn();
+	//ammoPickup.spawn();
+
+	while (mainScreen.isOpen()){
+
+		healthLevel.setPosition(1017, 65);
 		Time dt = tictoc.restart(); //Timpul dintre 2 treceri
+
+
 		if (!planeActive)
 		{
 			srand((int)time(0));
@@ -127,7 +148,7 @@ int main()
 			if (Event.type == Event::EventType::Closed)
 				mainScreen.close();
 			if (Keyboard::isKeyPressed(Keyboard::S))
-				mainTank.movePlayer('u', 0.75); //era 1.5 peste tot dar tancul se misca prea repede
+				mainTank.movePlayer('u', 0.75); 
 			else if (Keyboard::isKeyPressed(Keyboard::D))
 				mainTank.movePlayer('l', 0.75);
 			else if (Keyboard::isKeyPressed(Keyboard::A))
@@ -167,9 +188,27 @@ int main()
 
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
+		stringstream ss;
+		ss << "Integrity: " << mainTank.getHealth();
+		healthLevel.setString(ss.str());
 		mainTank.drawPlayer(mainScreen);
+		/*if (healthPickup.isSpawned())
+		{
+			mainScreen.draw(healthPickup.getSprite());
+		}
+		if (ammoPickup.isSpawned())
+		{
+			mainScreen.draw(ammoPickup.getSprite());
+		}*/
+
+		mainScreen.draw(healthPickup.getSprite());
+		//mainScreen.draw(ammoPickup.getSprite());
+
+		//mainScreen.draw(stone0);
 		mainScreen.draw(plane);
 		mainScreen.draw(plane2);
+		mainScreen.draw(healthLevel);
+		mainScreen.draw(healthBarEmpty);
 		mainScreen.draw(healthBar);
 		mainScreen.draw(HP);
 		for (int i = 0; i < 100; i++)

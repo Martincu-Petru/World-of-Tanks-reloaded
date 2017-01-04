@@ -16,7 +16,7 @@ public:
 	}
 	Player(string imageName)
 	{
-		currentHealth = 100;
+		currentHealth = 45;
 		maxHealth = 100;
 		if (!playerTexture.loadFromFile(imageName))
 			cerr << "Error" << endl;
@@ -32,11 +32,11 @@ public:
 	}
 	float getXorigin()
 	{
-		return playerSprite.getOrigin().x;
+		return playerSprite.getPosition().x;
 	}
 	float getYorigin()
 	{
-		return playerSprite.getOrigin().y; 
+		return playerSprite.getPosition().y;
 	}
 	void movePlayer(char direction, float moveSpeed)
 	{
