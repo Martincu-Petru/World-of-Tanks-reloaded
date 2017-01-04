@@ -6,16 +6,21 @@
 #include "bullet.h"
 #include <sstream> 
 #include "Pickup.h"
+#include "ai_Entity.h"
+#include "AI_Chaser.h"
+#include <stdlib.h>
 using namespace sf;
 using namespace std;
 
 int main()
 {
-
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	mainScreen.setKeyRepeatEnabled(true);
 	Player mainTank("E-100.png");
 
+	ai_Entity mainAI("Ferdinand.png");
+	AI_Chaser chaser("E-1002.png");
+	float rotationNeeded = 270;
 	// 2 bullets should do
 	Bullet bullets[2];
 	int currentBullet = 0, i;
@@ -116,9 +121,9 @@ int main()
 				plane2Active = false;
 		}
 
-		//while (mainScreen.pollEvent(Event)) 
-		//{
 			healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
+
+			//mainAI.BuildPathToTarget(mainTank.getXorigin(), mainTank.getYorigin());
 
 			//first we have to handle the player's input
 			if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
@@ -171,6 +176,34 @@ int main()
 			}
 
 
+			//from here
+			float xA = mainTank.getXorigin();
+			float yA = mainTank.getYorigin();
+			float chaserRotation = chaser.rotationOfChaser();
+			float radius = chaser.circleR(xA, yA);
+			double L = chaser.squareL(radius);
+			double xNextPoint, xChaser = chaser.getXorigin();
+			double yNextpoint, yChaser = chaser.getYorigin();
+			chaser.nextPointCoordinates(L, xNextPoint, yNextpoint);
+			if (chaserRotation < rotationNeeded && !chaser.isInMotion())
+			{
+				chaser.moveChaser('l', 1.5);
+			}
+			else if (chaserRotation == rotationNeeded && xNextPoint<xChaser && yNextpoint >= yChaser)
+			{
+				chaser.doNotRotate();
+				chaser.moveChaser('d', 1.5);
+			}
+
+
+			float rot = mainTank.rotationOfPlayer();
+			cout << " coordonate xA yA " << xA << " " << yA << endl;
+			cout << "raza cercului : " << radius << endl;
+			cout << "lungimea laturii patratului : " << L << endl;
+			cout << "rotatie : " << chaserRotation << " " << rot << endl << endl;
+			//to here for chaser
+
+
 			// Actualizarea pt bullets in-flight
 			for (i = 0; i < 2; i++)
 			{
@@ -180,7 +213,7 @@ int main()
 				}
 			}
 
-		//}
+
 
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
@@ -214,6 +247,8 @@ int main()
 				mainScreen.draw(bullets[i].getShape());
 			}
 		}
+		mainAI.draw_ai_Entity(mainScreen);
+		chaser.drawAI_Chaser(mainScreen);
 		mainScreen.display();
 	}
 }
