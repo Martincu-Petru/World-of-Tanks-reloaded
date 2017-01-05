@@ -18,11 +18,16 @@ public:
 	{
 		currentHealth = 45;
 		maxHealth = 100;
+		speed = 0.05;
 		if (!playerTexture.loadFromFile(imageName))
 			cerr << "Error" << endl;
 		playerTexture.setSmooth(true);
 		playerSprite.setTexture(playerTexture);
 		playerSprite.move(Vector2f(40, 700));
+	}
+	bool checkIfIntersect(Sprite entity)
+	{
+		return (playerSprite.getGlobalBounds().intersects(entity.getGlobalBounds()));
 	}
 	void drawPlayer(RenderWindow &screen)
 	{
@@ -38,26 +43,30 @@ public:
 	{
 		return playerSprite.getPosition().y;
 	}
-	void movePlayer(char direction, float moveSpeed)
+	void movePlayer(char direction)
 	{
 		if (direction == 'u')
 		{
-			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-moveSpeed, cos(playerSprite.getRotation()*3.14159265 / 180) * moveSpeed);
+			float newSpeed = rand() % 1000;
+			newSpeed /= 100000;
+			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed+newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed+newSpeed));
 		}
 		else
 			if (direction == 'd')
 			{
-				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * moveSpeed, cos(playerSprite.getRotation()*3.14159265 / 180)*-moveSpeed);
+				float newSpeed = rand() % 1000;
+				newSpeed /= 100000;
+				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed+newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed+ newSpeed));
 			}
 			else
 				if (direction == 'l')
 				{
-					playerSprite.rotate(moveSpeed-0.25);
+					playerSprite.rotate(speed);
 				}
 				else
 					if (direction == 'r')
 					{
-						playerSprite.rotate(-moveSpeed+0.25);
+						playerSprite.rotate(-speed);
 					}
 		if (playerSprite.getPosition().y + playerSprite.getGlobalBounds().height*0.5 > VideoMode::getDesktopMode().height)
 			playerSprite.setPosition(Vector2f(playerSprite.getPosition().x, VideoMode::getDesktopMode().height - playerSprite.getGlobalBounds().height*0.5));
@@ -73,6 +82,10 @@ public:
 	}
 	int getHealth() {
 		return currentHealth;
+	}
+	float getSpeed()
+	{
+		return speed;
 	}
 	Time getLastHitTime() {
 		return lastHit;
@@ -102,10 +115,24 @@ public:
 	{
 		return playerSprite.getRotation();
 	}
+	void updateHealth()
+	{
+		if (!(currentHealth + rand() % 26 + 5 > maxHealth))
+			currentHealth += rand() % 26 + 5;
+		else
+			currentHealth = maxHealth;
+	}
+	void updateSpeed()
+	{
+		if (speed <= 0.2)
+			speed += 0.03;
+		cout << speed << endl;
+	}
 private:
 	Texture playerTexture;
 	Sprite playerSprite;
 	int currentHealth;
 	int maxHealth;
 	Time lastHit;
+	float speed;
 }; 

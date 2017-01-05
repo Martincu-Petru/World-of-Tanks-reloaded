@@ -28,7 +28,7 @@ int main()
 	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture;
 	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite;
 	RectangleShape healthBar, healthBarEmpty;
-	Text healthLevel;
+	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned=false, speedSpawned=false, healthSpawned=false;
 	float planeSpeed = 0.0f, plane2Speed = 0.0f;
@@ -84,10 +84,15 @@ int main()
 	healthLevel.setFont(fontHealth);
 	healthLevel.setCharacterSize(30);
 	healthLevel.setFillColor(Color::White);
+	SpeedTank.setFont(fontHealth);
+	SpeedTank.setCharacterSize(30);
+	SpeedTank.setFillColor(Color::White);
 
 
 	while (mainScreen.isOpen()){
 		healthLevel.setPosition(1017, 65);
+		SpeedTank.setPosition(1017, 100);
+
 		Time dt = clock.restart(), speedSinceSpawn=speedClock.getElapsedTime(),
 			healthSinceSpawn= healthClock.getElapsedTime(), ammoSinceSpawn = ammoClock.getElapsedTime();
 		Time ammoSinceDespawn=ammoDespawnClock.getElapsedTime(), healthSinceDespawn=healthDespawnClock.getElapsedTime(), speedSinceDespawn=speedDespawnClock.getElapsedTime();
@@ -131,11 +136,7 @@ int main()
 			srand(time(0)*ammoSinceDespawn.asSeconds()+3.14);
 			int y = rand() % 500 + 10;
 			ammoSprite.setPosition(x, y);
-			if (healthSpawned == true && abs(x - healthSprite.getPosition().x) < 100 || abs(x - speedSprite.getPosition().x) < 100 && speedSpawned == true)
-			{
-				cout << "Nup";
-			}
-			else
+			if (!(healthSpawned == true && abs(x - healthSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 			{
 				ammoSpawned = true;
 				ammoClock.restart();
@@ -148,11 +149,7 @@ int main()
 			srand(time(0)*healthSinceDespawn.asSeconds()+3.14);
 			int y = rand() % 500 + 10;
 			healthSprite.setPosition(x, y);
-			if (ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 100 || abs(x - speedSprite.getPosition().x) < 100 && speedSpawned == true)
-			{
-				cout << "Nup";
-			}
-			else
+			if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 			{
 				healthSpawned = true;
 				healthClock.restart();
@@ -160,23 +157,21 @@ int main()
 
 
 		}
-		if (!speedSpawned && speedSinceDespawn.asSeconds()>4)
+		if (!speedSpawned && speedSinceDespawn.asSeconds()>1)
 		{
 			srand(time(0)*speedSinceDespawn.asSeconds());
 			int x = rand() % 1200 + 100;
 			srand(time(0)*speedSinceDespawn.asSeconds()+3.14);
 			int y = rand() % 500 + 10;
 			speedSprite.setPosition(x, y);
-			if (ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 100 || abs(x - healthSprite.getPosition().x) < 100 && healthSpawned == true)
-			{
-				cout << "Nup";
-			}
-			else
+			if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - healthSprite.getPosition().x) < 300 && healthSpawned == true))
 			{
 				speedSpawned = true;
 				speedClock.restart();
 			}
 		}
+
+		float tankSpeed=0;
 
 			healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
 
@@ -186,19 +181,29 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
 			{
 			//	cout << endl << " DA " << endl;
-				mainTank.movePlayer('u', 0.75); //era 1.5 peste tot dar tancul se misca prea repede
+				mainTank.movePlayer('u'); //era 1.5 peste tot dar tancul se misca prea repede
+				tankSpeed = rand() % 1000;
+				tankSpeed /= 1000;
+				tankSpeed = tankSpeed-mainTank.getSpeed()*300;
+				srand(time(0));
+				tankSpeed += rand() % 5;
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
 			{
-				mainTank.movePlayer('l', 0.75);
+				mainTank.movePlayer('l');
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
 			{
-				mainTank.movePlayer('r', 0.75);
+				mainTank.movePlayer('r');
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
 			{
-				mainTank.movePlayer('d', 0.75);
+				mainTank.movePlayer('d');
+				tankSpeed = rand() % 1000;
+				tankSpeed /= 1000;
+				tankSpeed = tankSpeed+mainTank.getSpeed()*300;
+				srand(time(0));
+				tankSpeed += rand() % 5;
 			}
 
 			// Fire a bullet
@@ -231,8 +236,6 @@ int main()
 			{
 				mainScreen.close();
 			}
-
-
 			//from here
 			float xA = mainTank.getXorigin();
 			float yA = mainTank.getYorigin();
@@ -272,32 +275,51 @@ int main()
 
 		mainScreen.clear();
 		mainScreen.draw(spriteBackground);
-		stringstream ss;
-		ss << "Integrity: " << mainTank.getHealth();
-		healthLevel.setString(ss.str());
-
+		stringstream string1, string2;
+		string1 << "Integrity: " << mainTank.getHealth();
+		healthLevel.setString(string1.str());
+		string2 << "Speed: " << tankSpeed;
+		SpeedTank.setString(string2.str());
 		mainTank.drawPlayer(mainScreen);
 		mainScreen.draw(stone0);
 		mainScreen.draw(plane);
 		mainScreen.draw(plane2);
 		mainScreen.draw(healthLevel);
+		mainScreen.draw(SpeedTank);
 		mainScreen.draw(healthBarEmpty);
 		mainScreen.draw(healthBar);
 		mainScreen.draw(HP);
-		if (ammoSinceSpawn.asSeconds() > 3)
+		if (ammoSinceSpawn.asSeconds() > 3 && ammoSpawned==true)
 		{
-			ammoClock.restart();
+			ammoDespawnClock.restart();
 			ammoSpawned = false;
 		}
-		if (healthSinceSpawn.asSeconds() > 4)
+		if (healthSinceSpawn.asSeconds() > 4 && healthSpawned==true)
 		{
-			healthClock.restart();
+			healthDespawnClock.restart();
 			healthSpawned = false;
 		}
-		if (speedSinceSpawn.asSeconds() > 5)
+		if (speedSinceSpawn.asSeconds() > 20 && speedSpawned==true)
 		{
-			speedClock.restart();
+			speedDespawnClock.restart();
 			speedSpawned = false;
+		}
+		if (mainTank.checkIfIntersect(ammoSprite))
+		{
+			ammoSpawned = false;
+			ammoDespawnClock.restart();
+		}
+		if (mainTank.checkIfIntersect(healthSprite) && healthSpawned)
+		{
+			mainTank.updateHealth();
+			healthSpawned = false;
+			healthDespawnClock.restart();
+		}
+		if (mainTank.checkIfIntersect(speedSprite) && speedSpawned)
+		{
+			mainTank.updateSpeed();
+			speedSpawned = false;
+			speedDespawnClock.restart();
 		}
 		if(ammoSpawned)
 			mainScreen.draw(ammoSprite);
