@@ -8,12 +8,14 @@
 #include "ai_Entity.h"
 #include "AI_Chaser.h"
 #include <stdlib.h>
+#include "menu.h"
 using namespace sf;
 using namespace std;
 
 int main()
 {
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
+	RenderWindow menuScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
 
 	ai_Entity mainAI("Ferdinand.png");
@@ -24,20 +26,20 @@ int main()
 	int currentBullet = 0, i;
 	
 	Event Event;
-	Clock tictoc, elapsed;;
-	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture;
-	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite;
+	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture;
+	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground;
 	RectangleShape healthBar, healthBarEmpty;
 	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned=false, speedSpawned=false, healthSpawned=false;
 	float planeSpeed = 0.0f, plane2Speed = 0.0f;
 	int health = mainTank.getHealth();
-	Clock clock, ammoClock, speedClock, healthClock, timeGone, ammoDespawnClock, speedDespawnClock, healthDespawnClock;
+	
 
 
 	mainScreen.setKeyRepeatEnabled(true);
 
+	menuTexture.loadFromFile("menu.png");
 	healthTexture.loadFromFile("health.png");
 	speedTexture.loadFromFile("speed.png");
 	ammoTexture.loadFromFile("ammo.png");
@@ -48,6 +50,7 @@ int main()
 	plane2Texture.loadFromFile("Bf110e.png");
 	fontHealth.loadFromFile("Font.ttf");
 
+	menuBackground.setTexture(menuTexture);
 	healthSprite.setTexture(healthTexture);
 	ammoSprite.setTexture(ammoTexture);
 	speedSprite.setTexture(speedTexture);
@@ -57,7 +60,7 @@ int main()
 	plane.setTexture(planeTexture);
 	plane2.setTexture(plane2Texture);
 
-
+	menuBackground.setPosition(0, 0);
 	HP.setPosition(1000, 20);
 	stone0.setPosition(100, 550);
 	spriteBackground.setPosition(0, 0);
@@ -87,8 +90,54 @@ int main()
 	SpeedTank.setFont(fontHealth);
 	SpeedTank.setCharacterSize(30);
 	SpeedTank.setFillColor(Color::White);
+	
+	menu meniu;
 
+	while (menuScreen.isOpen())
+	{
+		sf::Event menuEvent;
+		while (menuScreen.pollEvent(menuEvent))
+		{
+			switch (menuEvent.type)
+			{
+			case Event::KeyReleased:
+				switch (menuEvent.key.code)
+				{
+				case::Keyboard::Up:
+					meniu.moveUp();
+					break;
+				case::Keyboard::Down:
+					meniu.moveDown();
+					break;
+				case::Keyboard::Return:
+					switch (meniu.getPressedItem())
+					{
+					case 0:
+						goto play;
+						break;
+					case 3:
+						menuScreen.close();
+						return 0;
+						break;
+					}
+					break;
+				}
+				break;
+			case sf::Event::Closed:
+				menuScreen.close();
+				break;
+			}
+		} 
 
+		menuScreen.clear();
+		menuScreen.draw(menuBackground);
+		meniu.draw(menuScreen);
+		menuScreen.display();
+	}
+play:
+	Clock tictoc, elapsed;
+	Clock clock, ammoClock, speedClock, healthClock, timeGone, ammoDespawnClock, speedDespawnClock, healthDespawnClock;
+	menuScreen.close();
 	while (mainScreen.isOpen()){
 		healthLevel.setPosition(1017, 65);
 		SpeedTank.setPosition(1017, 100);
@@ -278,7 +327,7 @@ int main()
 		stringstream string1, string2;
 		string1 << "Integrity: " << mainTank.getHealth();
 		healthLevel.setString(string1.str());
-		string2 << "Speed: " << tankSpeed;
+		string2 << "Speed: " << tankSpeed<<" KM/H";
 		SpeedTank.setString(string2.str());
 		mainTank.drawPlayer(mainScreen);
 		mainScreen.draw(stone0);
