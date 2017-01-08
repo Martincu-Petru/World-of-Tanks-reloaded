@@ -38,11 +38,7 @@ menu::~menu()
 
 void menu::draw(RenderWindow &screen)
 {
-	//Texture menuTexture;
-	//Sprite menuBackground;
-	//menuTexture.loadFromFile("menu.png");
-	//menuBackground.setTexture(menuTexture);
-	////menuBackground.setPosition(0, 0);
+
 	for (int i = 0; i < NO_MAX_ITEME; i++)
 		screen.draw(optiunea[i]);
 }
