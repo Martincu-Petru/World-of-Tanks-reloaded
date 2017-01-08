@@ -16,7 +16,7 @@ public:
 	}
 	Player(string imageName)
 	{
-		currentHealth = 45;
+		currentHealth = 100;
 		maxHealth = 100;
 		speed = 0.05;
 		if (!playerTexture.loadFromFile(imageName))
@@ -127,6 +127,13 @@ public:
 		if (speed <= 0.2)
 			speed += 0.03;
 		cout << speed << endl;
+	}
+	void restart()
+	{
+		playerSprite.setPosition(Vector2f(40, 700));
+		currentHealth = 100;
+		speed = 0.05;
+		playerSprite.setRotation(0);
 	}
 private:
 	Texture playerTexture;

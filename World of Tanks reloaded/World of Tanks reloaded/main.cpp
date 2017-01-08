@@ -12,7 +12,7 @@
 using namespace sf;
 using namespace std;
 
-void moveUp(int &itemCurent, Text optiunea[4])
+void moveUp(int &itemCurent, Text optiunea[4], int nrOptiuni)
 {
 	if (itemCurent - 1 >= 0)
 	{
@@ -22,9 +22,9 @@ void moveUp(int &itemCurent, Text optiunea[4])
 	}
 }
 
-void moveDown(int &itemCurent, Text optiunea[4])
+void moveDown(int &itemCurent, Text optiunea[4], int nrOptiuni)
 {
-	if (itemCurent + 1 < 4)
+	if (itemCurent + 1 < nrOptiuni)
 	{
 		optiunea[itemCurent].setFillColor(Color::White);
 		itemCurent++;
@@ -33,7 +33,7 @@ void moveDown(int &itemCurent, Text optiunea[4])
 }
 
 Font textStyle;
-Text optiunea[4], optiuneaExit[3];
+Text optiunea[4], optiuneaExit[3], optiuneaResume[3];
 
 void moveLeft(int &itemCurentExit, Text optiuneaExit[3])
 {
@@ -102,10 +102,32 @@ void setOptions()
 	optiunea[3].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2.5 + 200));
 }
 
+void resumeGame()
+{
+	if (!textStyle.loadFromFile("Font.ttf"))
+		cout << "Error loading font!";
+
+	optiuneaResume[0].setFont(textStyle);
+	optiuneaResume[0].setFillColor(Color::Red);
+	optiuneaResume[0].setString("Resume game");
+	optiuneaResume[0].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1 + 200));
+
+	optiuneaResume[1].setFont(textStyle);
+	optiuneaResume[1].setFillColor(Color::White);
+	optiuneaResume[1].setString("New game");
+	optiuneaResume[1].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1.5 + 200));
+
+	optiuneaResume[2].setFont(textStyle);
+	optiuneaResume[2].setFillColor(Color::White);
+	optiuneaResume[2].setString("Back to menu");
+	optiuneaResume[2].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2 + 200));
+}
+
 int main()
 {
 	setOptions();
 	setOptionsExit();
+	resumeGame();
 
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
@@ -118,18 +140,19 @@ int main()
 	int currentBullet = 0, i;
 
 	Event Event;
-	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture;
-	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground;
+	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
+	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground, resumeBackground;
 	RectangleShape healthBar, healthBarEmpty;
 	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned = false, speedSpawned = false, healthSpawned = false;
-	float planeSpeed = 0.0f, plane2Speed = 0.0f;
-	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2;
+	float planeSpeed = 0.0f, plane2Speed = 0.0f, TIMP=0, ammoSinceDespawn=0, healthSinceDespawn=0, speedSinceDespawn=0, ammoSinceSpawn=0, healthSinceSpawn=0, speedSinceSpawn=0;
+	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0;
 
 
 	mainScreen.setKeyRepeatEnabled(true);
 
+	ResumeTexture.loadFromFile("menu.png");
 	menuBackgroundExitTexture.loadFromFile("menu_exit.png");
 	menuTexture.loadFromFile("menu.png");
 	healthTexture.loadFromFile("health.png");
@@ -142,6 +165,7 @@ int main()
 	plane2Texture.loadFromFile("Bf110e.png");
 	fontHealth.loadFromFile("Font.ttf");
 
+	resumeBackground.setTexture(ResumeTexture);
 	menuExitBackground.setTexture(menuBackgroundExitTexture);
 	menuBackground.setTexture(menuTexture);
 	healthSprite.setTexture(healthTexture);
@@ -153,6 +177,7 @@ int main()
 	plane.setTexture(planeTexture);
 	plane2.setTexture(plane2Texture);
 
+	resumeBackground.setPosition(0, 0);
 	menuBackground.setPosition(0, 0);
 	HP.setPosition(1000, 20);
 	stone0.setPosition(100, 550);
@@ -186,8 +211,7 @@ int main()
 
 	menu meniu;
 
-	Clock tictoc, elapsed;
-	Clock clock, ammoClock, speedClock, healthClock, timeGone, ammoDespawnClock, speedDespawnClock, healthDespawnClock;
+	Clock timeGone;
 	int opt = 1;
 	while (mainScreen.isOpen()) {
 
@@ -202,10 +226,10 @@ int main()
 					switch (menuEvent.key.code)
 					{
 					case::Keyboard::Up:
-						moveUp(itemCurent, optiunea);
+						moveUp(itemCurent, optiunea, 4);
 						break;
 					case::Keyboard::Down:
-						moveDown(itemCurent, optiunea);
+						moveDown(itemCurent, optiunea, 4);
 						break;
 					case::Keyboard::Return:
 						switch (itemCurent)
@@ -235,12 +259,89 @@ int main()
 		else
 			if (opt == 2)
 			{
+				sf::Event menuEvent;
+				while (mainScreen.pollEvent(menuEvent))
+				{
+					switch (menuEvent.type)
+					{
+					case Event::KeyPressed:
+						switch (menuEvent.key.code)
+						{
+						case::Keyboard::Up:
+							moveUp(itemCurentResume, optiuneaResume, 3);
+							break;
+						case::Keyboard::Down:
+							moveDown(itemCurentResume, optiuneaResume, 3);
+							break;
+						case::Keyboard::Return:
+							switch (itemCurentResume)
+							{
+							case 0:
+								opt = 3;
+								break;
+							case 1:
+								opt = 5;
+								break;
+							case 2:
+								opt = 1;
+								break;
+							}
+							break;
+						}
+						break;
+					case sf::Event::Closed:
+						mainScreen.close();
+						break;
+					}
+				}
+				mainScreen.clear();
+				mainScreen.draw(resumeBackground);
+				for (int i = 0; i < 3; i++)
+					mainScreen.draw(optiuneaResume[i]);
+				mainScreen.display();
+			}
+			else
+				if (opt == 5)
+				{
+
+					ammoSinceDespawn = 0;
+					ammoSinceSpawn = 0;
+					healthSinceSpawn = 0;
+					healthSinceDespawn = 0;
+					speedSinceSpawn = 0;
+					speedSinceDespawn = 0;
+					ammoSpawned = false;
+					speedSpawned = false;
+					healthSpawned = false;
+					plane2Active = false;
+					planeActive = false;
+					mainTank.restart();
+					opt = 3;
+				}
+				else
+			if (opt == 3)
+			{
 				healthLevel.setPosition(1017, 65);
 				SpeedTank.setPosition(1017, 100);
 
-				Time dt = clock.restart(), speedSinceSpawn = speedClock.getElapsedTime(),
-					healthSinceSpawn = healthClock.getElapsedTime(), ammoSinceSpawn = ammoClock.getElapsedTime();
-				Time ammoSinceDespawn = ammoDespawnClock.getElapsedTime(), healthSinceDespawn = healthDespawnClock.getElapsedTime(), speedSinceDespawn = speedDespawnClock.getElapsedTime();
+				Time dt=timeGone.restart();
+
+				if(dt.asSeconds()<1)
+					TIMP = dt.asSeconds();
+				if (!ammoSpawned)
+					ammoSinceDespawn += TIMP;
+				if (!speedSpawned)
+					speedSinceDespawn += TIMP;
+				if (!healthSpawned)
+					healthSinceDespawn += TIMP;
+
+				if (ammoSpawned)
+					ammoSinceSpawn += TIMP;
+				if (speedSpawned)
+					speedSinceSpawn += TIMP;
+				if (healthSpawned)
+					healthSinceSpawn += TIMP;
+
 				if (!planeActive)
 				{
 					srand((int)time(0));
@@ -253,7 +354,7 @@ int main()
 				}
 				else
 				{
-					plane.setPosition(plane.getPosition().x - (planeSpeed * dt.asSeconds()), plane.getPosition().y);
+					plane.setPosition(plane.getPosition().x - (planeSpeed * TIMP), plane.getPosition().y);
 					if (plane.getPosition().x < -200)
 						planeActive = false;
 				}
@@ -270,49 +371,49 @@ int main()
 				}
 				else
 				{
-					plane2.setPosition(plane2.getPosition().x + (plane2Speed * dt.asSeconds()), plane2.getPosition().y);
+				if(opt==3)plane2.setPosition(plane2.getPosition().x + (plane2Speed * TIMP), plane2.getPosition().y);
 					if (plane2.getPosition().x > 1400)
 						plane2Active = false;
 				}
-				if (!ammoSpawned && ammoSinceDespawn.asSeconds() > 2)
+				if (!ammoSpawned && ammoSinceDespawn > 5)
 				{
-					srand(time(0)*ammoSinceDespawn.asSeconds());
+					srand(time(0)*ammoSinceDespawn);
 					int x = rand() % 1200 + 100;
-					srand(time(0)*ammoSinceDespawn.asSeconds() + 3.14);
+					srand(time(0)*ammoSinceDespawn + 3.14);
 					int y = rand() % 500 + 10;
 					ammoSprite.setPosition(x, y);
 					if (!(healthSpawned == true && abs(x - healthSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 					{
 						ammoSpawned = true;
-						ammoClock.restart();
+						ammoSinceSpawn = 0;
 					}
 				}
-				if (!healthSpawned && healthSinceDespawn.asSeconds() > 3)
+				if (!healthSpawned && healthSinceDespawn > 6)
 				{
-					srand(time(0)*healthSinceDespawn.asSeconds());
+					srand(time(0)*healthSinceDespawn);
 					int x = rand() % 1200 + 100;
-					srand(time(0)*healthSinceDespawn.asSeconds() + 3.14);
+					srand(time(0)*healthSinceDespawn + 3.14);
 					int y = rand() % 500 + 10;
 					healthSprite.setPosition(x, y);
 					if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 					{
 						healthSpawned = true;
-						healthClock.restart();
+						healthSinceSpawn = 0;
 					}
 
 
 				}
-				if (!speedSpawned && speedSinceDespawn.asSeconds() > 1)
+				if (!speedSpawned && speedSinceDespawn > 4)
 				{
-					srand(time(0)*speedSinceDespawn.asSeconds());
+					srand(time(0)*speedSinceDespawn);
 					int x = rand() % 1200 + 100;
-					srand(time(0)*speedSinceDespawn.asSeconds() + 3.14);
+					srand(time(0)*speedSinceDespawn + 3.14);
 					int y = rand() % 500 + 10;
 					speedSprite.setPosition(x, y);
 					if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - healthSprite.getPosition().x) < 300 && healthSpawned == true))
 					{
 						speedSpawned = true;
-						speedClock.restart();
+						speedSinceSpawn = 0;
 					}
 				}
 
@@ -379,7 +480,7 @@ int main()
 
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
-					mainScreen.close();
+					opt = 1;
 				}
 				//from here
 				float xA = mainTank.getXorigin();
@@ -417,7 +518,6 @@ int main()
 						bullets[i].update(0.250);
 					}
 				}
-
 				mainScreen.clear();
 				mainScreen.draw(spriteBackground);
 				stringstream string1, string2;
@@ -434,37 +534,37 @@ int main()
 				mainScreen.draw(healthBarEmpty);
 				mainScreen.draw(healthBar);
 				mainScreen.draw(HP);
-				if (ammoSinceSpawn.asSeconds() > 3 && ammoSpawned == true)
+				if (ammoSinceSpawn > 6 && ammoSpawned == true)
 				{
-					ammoDespawnClock.restart();
+					ammoSinceDespawn = 0;
 					ammoSpawned = false;
 				}
-				if (healthSinceSpawn.asSeconds() > 4 && healthSpawned == true)
+				if (healthSinceSpawn > 7 && healthSpawned == true)
 				{
-					healthDespawnClock.restart();
+					healthSinceDespawn = 0;
 					healthSpawned = false;
 				}
-				if (speedSinceSpawn.asSeconds() > 20 && speedSpawned == true)
+				if (speedSinceSpawn > 5 && speedSpawned == true)
 				{
-					speedDespawnClock.restart();
+					speedSinceDespawn = 0;
 					speedSpawned = false;
 				}
 				if (mainTank.checkIfIntersect(ammoSprite))
 				{
 					ammoSpawned = false;
-					ammoDespawnClock.restart();
+					ammoSinceDespawn = 0;
 				}
 				if (mainTank.checkIfIntersect(healthSprite) && healthSpawned)
 				{
 					mainTank.updateHealth();
 					healthSpawned = false;
-					healthDespawnClock.restart();
+					healthSinceDespawn = 0;
 				}
 				if (mainTank.checkIfIntersect(speedSprite) && speedSpawned)
 				{
 					mainTank.updateSpeed();
 					speedSpawned = false;
-					speedDespawnClock.restart();
+					speedSinceDespawn = 0;
 				}
 				if (ammoSpawned)
 					mainScreen.draw(ammoSprite);
