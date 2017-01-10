@@ -135,6 +135,39 @@ public:
 		speed = 0.05;
 		playerSprite.setRotation(0);
 	}
+	void goodPoint(float &x, float &y)
+	{
+		int r = playerSprite.getGlobalBounds().height / 2;
+		float xA = playerSprite.getPosition().x;
+		float yA = playerSprite.getPosition().y;
+		double rotation = playerSprite.getRotation();
+
+		float cosT = cos(rotation * 3.14159265 / 180.0);
+		float c = r * abs(cosT);
+		if (0 <= rotation && rotation <= 90 || 270 <= rotation && rotation < 360)
+		{
+			y = yA - c;
+		}
+		else
+		{
+			y = yA + c;
+		}
+		x = sqrt(r * r - (yA - y) * (yA - y)) + xA;
+		if (rotation > 180)
+		{
+			x = xA - sqrt(r * r - (yA - y) * (yA - y));
+		}
+		else if (rotation == 90)
+		{
+			x = xA + r;
+			y = yA;
+		}
+		else if (rotation == 270)
+		{
+			y = yA;
+			x = xA + r;
+		}
+	}
 private:
 	Texture playerTexture;
 	Sprite playerSprite;
