@@ -138,10 +138,11 @@ int main()
 	float tankX = mainTank.getXorigin();
 	float tankY = mainTank.getYorigin();
 	float rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-	float path;
+	float path, changePath;
 	int ok = 1, okayGo = 0;
 	Bullet chaserBullets[3];
 	int chaserCurrentBullet = 0, j;
+	int chaserLife = 3;
 	srand(time(NULL));
 	//---------------------------------------------------------------------------------------------------------------
 	//this does not change
@@ -153,7 +154,7 @@ int main()
 	unsigned int X = mainTank.xMaxim();
 	unsigned int Y = mainTank.yMaxim();
 
-
+	
 	// 2 bullets should do
 	Bullet bullets[10];
 	int currentBullet = 0, i;
@@ -482,7 +483,7 @@ int main()
 						double rotation = (double)mainTank.rotationOfPlayer();
 						bullets[currentBullet].thirdPoint(tankXX, tankYY, rotation, xOrigin, yOrigin, X, Y);
 
-						bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin);
+						bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin, rotation);
 						currentBullet++;
 						if (currentBullet >= playerNumberBullets)
 						{
@@ -549,6 +550,7 @@ int main()
 					cout << "the rotation needed when it shoult stop " << rotationNeeded << endl;
 					cout << "the calculated path ";*/
 					path = chaser.pathToPlayer(tankX, tankY);
+					changePath = path;
 					//cout << path << "   and then   ";
 					//cout << path << endl;
 				}
@@ -563,7 +565,11 @@ int main()
 					chaser.rotate();
 					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
 				}
-
+				if ((changePath - path - changePath / 4 > 0) && (changePath - path - changePath / 4 < 3))
+				{
+					chaser.rotate();
+					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+				}
 
 
 				
@@ -580,7 +586,7 @@ int main()
 						chaser.goodPoint(chaserXX, chaserYY);
 						double rotation = (double)chaser.rotationOfChaser();
 						chaserBullets[chaserCurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
-						chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin);
+						chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
 						chaserCurrentBullet++;
 						if (chaserCurrentBullet > 1)
 						{
@@ -594,6 +600,13 @@ int main()
 					if (bullets[i].isInFlight())
 					{
 						bullets[i].update(0.2);
+						//RectangleShape bullet = bullets[i].getShape()
+						//Sprite bullet = bullets[i].getShape();
+						if (mainTank.checkIfIntersect(bullets[i].getShape()))
+						{
+							chaserLife--;
+							bullets[i].stop();
+						}
 					}
 				}
 				//CHASER BULLETS UPDATE MOVEMENT -------------------------------------
@@ -677,8 +690,11 @@ int main()
 						mainScreen.draw(chaserBullets[j].getShape());
 					}
 				}
-				mainAI.draw_ai_Entity(mainScreen);
-				chaser.drawAI_Chaser(mainScreen);
+				//mainAI.draw_ai_Entity(mainScreen); we don't have this entity yet
+				if (chaserLife > 0)
+				{
+					chaser.drawAI_Chaser(mainScreen);
+				}
 				mainScreen.display();
 			}
 			else

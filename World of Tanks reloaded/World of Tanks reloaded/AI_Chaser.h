@@ -33,6 +33,7 @@ public:
 		AI_ChaserTexture.setSmooth(true);
 		AI_ChaserSprite.setTexture(AI_ChaserTexture);
 		AI_ChaserSprite.move(Vector2f(1000, 257.164));
+		AI_ChaserSprite.setRotation(180);
 	}
 	void drawAI_Chaser(RenderWindow &screen)
 	{
@@ -184,5 +185,10 @@ public:
 		float yC = AI_ChaserSprite.getPosition().y;
 
 		return sqrt(abs(xC - xA) + abs(yC - yA));
+	}
+	bool checkIfIntersect(Sprite entity)
+	{
+		return (AI_ChaserSprite.getGlobalBounds().intersects(entity.getGlobalBounds()));
+		//return (AI_ChaserSprite.getGlobalBounds().intersects())
 	}
 };

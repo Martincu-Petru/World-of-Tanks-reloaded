@@ -18,7 +18,7 @@ public:
 	{
 		currentHealth = 100;
 		maxHealth = 100;
-		speed = 0.05;
+		speed = 7;//0.7;//0.05;
 		if (!playerTexture.loadFromFile(imageName))
 			cerr << "Error" << endl;
 		playerTexture.setSmooth(true);

@@ -16,8 +16,8 @@ private:
 	Vector2f m_Position;
 
 	// What each bullet looks like
-	RectangleShape m_BulletShape;
-
+	//RectangleShape m_BulletShape;
+	Sprite bullet;
 	// Is this bullet currently whizzing through the air
 	bool m_InFlight = false;
 
@@ -40,7 +40,12 @@ public:
 
 	Bullet()
 	{
-		m_BulletShape.setSize(Vector2f(3, 5));
+		//m_BulletShape.setSize(Vector2f(3, 5));
+		//Sprite bullet;
+		Texture bulletTexture;
+		bulletTexture.loadFromFile("bullet.png");
+		bullet.setTexture(bulletTexture);
+		bullet.scale(0.03f, 0.03f);
 		// The constructor
 	}
 	void stop()
@@ -53,10 +58,11 @@ public:
 		// Returns the value of m_InFlight
 		return m_InFlight;
 	}
-	void shoot(float startX, float startY, float targetX, float targetY)
+	void shoot(float startX, float startY, float targetX, float targetY, float rotation)
 	{
 		// Launch a new bullet
 		// Keep track of the bullet
+		bullet.setRotation(rotation);
 		m_InFlight = true;
 		m_Position.x = startX;
 		m_Position.y = startY;
@@ -95,17 +101,18 @@ public:
 		m_MaxY = VideoMode::getDesktopMode().height;
 
 		// Position the bullet ready to be drawn
-		m_BulletShape.setPosition(m_Position);
+		//m_BulletShape.setPosition(m_Position);
+		bullet.setPosition(m_Position);
 	}
 	FloatRect getPosition()
 	{
 		// Tell the calling code where the bullet is in the world
-		return m_BulletShape.getGlobalBounds();
+		return bullet.getGlobalBounds();
 	}
-	RectangleShape getShape()
+	Sprite getShape()
 	{
 		// Return the actual shape (for drawing)
-		return m_BulletShape;
+		return bullet;
 	}
 	void update(float elapsedTime)
 	{
@@ -115,7 +122,7 @@ public:
 		m_Position.y += m_BulletDistanceY * elapsedTime;
 
 		// Move the bullet
-		m_BulletShape.setPosition(m_Position);
+		bullet.setPosition(m_Position);
 
 		// Has the bullet gone out of range?
 		if (m_Position.x < m_MinX || m_Position.x > m_MaxX || m_Position.y < m_MinY || m_Position.y > m_MaxY)
@@ -327,5 +334,9 @@ public:
 			xC = xA;
 			yC = 0;
 		}
+	}
+	void setBulletRotation(float rotation)
+	{
+		bullet.setRotation(rotation);
 	}
 };
