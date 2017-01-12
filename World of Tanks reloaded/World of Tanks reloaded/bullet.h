@@ -16,8 +16,8 @@ private:
 	Vector2f m_Position;
 
 	// What each bullet looks like
-	//RectangleShape m_BulletShape;
-	Sprite bullet;
+	RectangleShape m_BulletShape;
+
 	// Is this bullet currently whizzing through the air
 	bool m_InFlight = false;
 
@@ -40,12 +40,7 @@ public:
 
 	Bullet()
 	{
-		//m_BulletShape.setSize(Vector2f(3, 5));
-		//Sprite bullet;
-		Texture bulletTexture;
-		bulletTexture.loadFromFile("bullet.png");
-		bullet.setTexture(bulletTexture);
-		bullet.scale(0.03f, 0.03f);
+		m_BulletShape.setSize(Vector2f(3, 5));
 		// The constructor
 	}
 	void stop()
@@ -58,11 +53,10 @@ public:
 		// Returns the value of m_InFlight
 		return m_InFlight;
 	}
-	void shoot(float startX, float startY, float targetX, float targetY, float rotation)
+	void shoot(float startX, float startY, float targetX, float targetY)
 	{
 		// Launch a new bullet
 		// Keep track of the bullet
-		bullet.setRotation(rotation);
 		m_InFlight = true;
 		m_Position.x = startX;
 		m_Position.y = startY;
@@ -101,18 +95,17 @@ public:
 		m_MaxY = VideoMode::getDesktopMode().height;
 
 		// Position the bullet ready to be drawn
-		//m_BulletShape.setPosition(m_Position);
-		bullet.setPosition(m_Position);
+		m_BulletShape.setPosition(m_Position);
 	}
 	FloatRect getPosition()
 	{
 		// Tell the calling code where the bullet is in the world
-		return bullet.getGlobalBounds();
+		return m_BulletShape.getGlobalBounds();
 	}
-	Sprite getShape()
+	RectangleShape getShape()
 	{
 		// Return the actual shape (for drawing)
-		return bullet;
+		return m_BulletShape;
 	}
 	void update(float elapsedTime)
 	{
@@ -122,7 +115,7 @@ public:
 		m_Position.y += m_BulletDistanceY * elapsedTime;
 
 		// Move the bullet
-		bullet.setPosition(m_Position);
+		m_BulletShape.setPosition(m_Position);
 
 		// Has the bullet gone out of range?
 		if (m_Position.x < m_MinX || m_Position.x > m_MaxX || m_Position.y < m_MinY || m_Position.y > m_MaxY)
@@ -134,128 +127,205 @@ public:
 	{
 		xC = 0;
 		yC = 0;
-		float AB, AC;
-		double cosbeta, beta, alpha, cosalpha;
+		double cosalpha;
+		double alpha = 0, b, c, xV1, yV1, xV2, yV2, beta, auxiliar;
 		if (0 < rotation && rotation < 90)
 		{
-			AB = yA;
-			AC = sqrt(pow(xMax - xA, 2) + yA * yA);
-			cosbeta = AB / AC;
-			beta = cosbeta * 180.0 / M_PI;
-			if (rotation < beta)
+
+			cosalpha = yA / (sqrt((xMax - xA) * (xMax - xA) + yA * yA));
+
+			if (cosalpha > 1)
 			{
-				alpha = rotation;
-				cosalpha = cos(alpha * M_PI / 180.0);
-				xC = yA * tan(alpha * M_PI / 180.0) + xA;
+				while (cosalpha > 1)
+				{
+					cosalpha = cosalpha - 2 * M_PI;
+				}
+			}
+			alpha = cos(rotation * M_PI / 180.0);
+
+
+			if (alpha > cosalpha)
+			{
+				beta = rotation;
+				c = yA * yA;
+				b = c / cos(beta * M_PI / 180.0);
+				xC = sqrt(b - c) + xA;
 				yC = 0;
+				if (xC < xA)
+				{
+					auxiliar = xA - xC;
+					xC = xA + auxiliar;
+				}
 			}
 			else
 			{
-				alpha = 90 - rotation;
-				yC = (xMax - xA) * tan(alpha * M_PI / 180.0) + yA;
+				beta = 90 - rotation;
+				c = (xMax - xA) * (xMax - xA);
+				b = c / cos(beta * M_PI / 180.0);
 				xC = xMax;
+				yC = sqrt(b - c) + yA;
 				if (yC > yA)
 				{
-					float auxiliar = yC - yA;
+					auxiliar = yC - yA;
 					yC = yA - auxiliar;
 				}
 			}
-		}
-		else if (90 < rotation && rotation < 180)
-		{
-			AB = xMax - xA;
-			AC = sqrt(pow(xMax - xA, 2) + pow(yMax - yA, 2));
-			cosbeta = AB / AC;
-			beta = cosbeta * 180.0 / M_PI;
-			if (rotation - 90 < beta)
-			{
-				alpha = rotation - 90;
-				yC = (xMax - xA) * tan(alpha * M_PI / 180.0) + yA;
-				xC = xMax;
-			}
-			else
-			{
-				alpha = 180 - rotation;
-				xC = (yMax - yA) * tan(alpha * M_PI / 180.0) + xA;
-				yC = yMax;
-			}
-		}
-		else if (180 < rotation && rotation < 270)
-		{
-			AB = yMax - yA;
-			AC = sqrt(xA * xA + pow(yMax - yA, 2));
-			cosbeta = AB / AC;
-			beta = cosbeta * 180.0 / M_PI;
-			if (rotation - 180 < beta)
-			{
-				alpha = rotation - 180;
-				xC = (yMax - yA) * tan(alpha * M_PI / 180.0) + xA;
-				yC = yMax;
-				if (xC > xA)
-				{
-					float auxiliar = xC - xA;
-					xC = xA - auxiliar;
-				}
-			}
-			else
-			{
-				alpha = 270 - rotation;
-				yC = xA * tan(alpha * M_PI / 180.0) + yA;
-				xC = 0;
-			}
-		}
-		else if (rotation > 270)
-		{
-			AB = xA;
-			AC = sqrt(xA * xA + yA * yA);
-			cosbeta = AB / AC;
-			beta = cosbeta * 180.0 / M_PI;
-			if (rotation - 270 < beta)
-			{
-				alpha = rotation - 270;
-				yC = xA * tan(alpha * M_PI / 180.0) + yA;
-				xC = 0;
-				if (yC > yA)
-				{
-					float auxiliar = yC - yA;
-					yC = yA - auxiliar;
-				}
-			}
-			else
-			{
-				alpha = 360 - rotation;
-				xC = yA * tan(alpha * M_PI / 180.0) + xA;
-				yC = 0;
-				if (xC > xA)
-				{
-					float auxiliar = xC - xA;
-					xC = xA - auxiliar;
-				}
-			}
-		}
-		else if (rotation == 0 || rotation == 360)
-		{
-			xC = xA;
-			yC = 0;
 		}
 		else if (rotation == 90)
 		{
 			xC = xMax;
 			yC = yA;
 		}
+		else if (90 < rotation && rotation < 180)
+		{
+			xV1 = xMax - xA;
+			yV1 = yA - yA;
+
+			xV2 = xMax - xA;
+			yV2 = yMax - yA;
+
+			cosalpha = (xV1 * xV2 + yV1 * yV2) / ((sqrt(xV1 * xV1 + yV1 * yV1)) + (sqrt(xV2 * xV2 + yV2 * yV2)));
+			if (cosalpha < -1)
+			{
+				while (cosalpha < -1)
+				{
+					cosalpha += 2 * M_PI;
+				}
+			}
+			alpha = cos(rotation * M_PI / 180.0);
+
+			if (alpha > cosalpha)
+			{
+				beta = rotation - 90;
+				c = (xMax - xA) * (xMax - xA);
+				b = c / cos(beta * M_PI / 180.0);
+				xC = xMax;
+				yC = sqrt(b - c) + yA;
+				if (yC < yA)
+				{
+					auxiliar = yA - yC;
+					yC = yA + auxiliar;
+				}
+			}
+			else
+			{
+				beta = 180 - rotation;
+				c = (yMax - yA) * (yMax - yA);
+				b = c / cos(beta * M_PI / 180.0);
+				xC = sqrt(b - c) + xA;
+				yC = yMax;
+				if (xC < xA)
+				{
+					auxiliar = xA - xC;
+					xC = xA + auxiliar;
+				}
+			}
+		}
 		else if (rotation == 180)
 		{
 			xC = xA;
 			yC = yMax;
+		}
+		else if (180 < rotation && rotation < 270)
+		{
+			xV1 = xA - xA;
+			yV1 = yMax - yA;
+
+			xV2 = 0 - xA;
+			yV2 = yMax - yA;
+
+			cosalpha = (xV1 * xV2 + yV1 * yV2) / ((sqrt(xV1 * xV1 + yV1 * yV1)) + (sqrt(xV2 * xV2 + yV2 * yV2)));
+			if (cosalpha < -1)
+			{
+				while (cosalpha < -1)
+				{
+					cosalpha += 2 * M_PI;
+				}
+			}
+			alpha = cos(rotation * M_PI / 180.0);
+
+			if (alpha < cosalpha)
+			{
+				beta = rotation - 180;
+				c = (yMax - yA) * (yMax - yA);
+				b = c / cos(beta * M_PI / 180.0);
+				xC = sqrt(b - c) + xA;
+				yC = yMax;
+				if (xC > xA)
+				{
+					auxiliar = xC - xA;
+					xC = xA - auxiliar;
+				}
+			}
+			else
+			{
+				beta = 270 - rotation;
+				c = xA * xA;
+				b = c / cos(beta * M_PI / 180.0);
+				xC = 0;
+				yC = sqrt(b - c) + yA;
+				if (yC < yA)
+				{
+					auxiliar = yA - yC;
+					yC = yA + auxiliar;
+				}
+			}
 		}
 		else if (rotation == 270)
 		{
 			xC = 0;
 			yC = yA;
 		}
-	}
-	void setBulletRotation(float rotation)
-	{
-		bullet.setRotation(rotation);
+		else if (270 < rotation && rotation < 360)
+		{
+			xV1 = 0 - xA;
+			yV1 = yA - yA;
+
+			xV2 = 0 - xA;
+			yV2 = 0 - yA;
+
+			cosalpha = (xV1 * xV2 + yV1 * yV2) / ((sqrt(xV1 * xV1 + yV1 * yV1)) + (sqrt(xV2 * xV2 + yV2 * yV2)));
+
+			if (cosalpha > 1)
+			{
+				while (cosalpha > 1)
+				{
+					cosalpha -= 2 * M_PI;
+				}
+			}
+			alpha = cos(rotation * M_PI / 180.0);
+
+			if (alpha < cosalpha)
+			{
+				beta = rotation - 270;
+				c = xA * xA;
+				b = c / cos(beta * M_PI / 180.0);
+				xC = 0;
+				yC = sqrt(b - c) + yA;
+				if (yC > yA)
+				{
+					auxiliar = yC - yA;
+					yC = yA - auxiliar;
+				}
+			}
+			else
+			{
+				beta = 360 - rotation;
+				c = yA * yA;
+				b = c / cos(beta * M_PI / 180.0);
+				xC = sqrt(b - c) + xA;
+				yC = 0;
+				if (xC > xA)
+				{
+					auxiliar = xC - xA;
+					xC = xA - auxiliar;
+				}
+			}
+		}
+		else
+		{
+			xC = xA;
+			yC = 0;
+		}
 	}
 };
