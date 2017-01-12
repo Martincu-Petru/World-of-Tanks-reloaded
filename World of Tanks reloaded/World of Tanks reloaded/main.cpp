@@ -9,6 +9,7 @@
 #include "AI_Chaser.h"
 #include <stdlib.h>
 #include "menu.h"
+#include <fstream>
 using namespace sf;
 using namespace std;
 
@@ -33,7 +34,48 @@ void moveDown(int &itemCurent, Text optiunea[4], int nrOptiuni)
 }
 
 Font textStyle;
-Text optiunea[4], optiuneaExit[3], optiuneaResume[3];
+Text optiunea[4], optiuneaExit[3], optiuneaResume[3], optiuneaDif[5];
+
+bool matrix[14][23];
+
+void citire()
+{
+	ifstream fi("mat.in");
+	for (int i = 0; i < 14; i++)
+		for (int j = 0; j < 23; j++)
+			fi >> matrix[i][j];
+}
+
+void setOptionsDif()
+{
+	if (!textStyle.loadFromFile("Font.ttf"))
+		cout << "Error loading font!";
+
+	optiuneaDif[0].setFont(textStyle);
+	optiuneaDif[0].setFillColor(Color::White);
+	optiuneaDif[0].setString("Difficulty");
+	optiuneaDif[0].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1 + 125));
+
+	optiuneaDif[1].setFont(textStyle);
+	optiuneaDif[1].setFillColor(Color::Red);
+	optiuneaDif[1].setString("Easy");
+	optiuneaDif[1].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1.5 + 125));
+
+	optiuneaDif[2].setFont(textStyle);
+	optiuneaDif[2].setFillColor(Color::White);
+	optiuneaDif[2].setString("Medium");
+	optiuneaDif[2].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2 + 125));
+
+	optiuneaDif[3].setFont(textStyle);
+	optiuneaDif[3].setFillColor(Color::White);
+	optiuneaDif[3].setString("Hard");
+	optiuneaDif[3].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2.5 + 125));
+
+	optiuneaDif[4].setFont(textStyle);
+	optiuneaDif[4].setFillColor(Color::White);
+	optiuneaDif[4].setString("Back to menu");
+	optiuneaDif[4].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 3 + 125));
+}
 
 void moveLeft(int &itemCurentExit, Text optiuneaExit[3])
 {
@@ -128,7 +170,8 @@ int main()
 	setOptions();
 	setOptionsExit();
 	resumeGame();
-
+	setOptionsDif();
+	citire();
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
 
@@ -140,14 +183,27 @@ int main()
 	int currentBullet = 0, i;
 
 	Event Event;
-	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
+	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture, CrateTexture;
 	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground, resumeBackground;
+	CrateTexture.loadFromFile("crate.png");
+	Sprite obstacol[100];
+	for (int i = 0; i < 100; i++)
+	{
+		obstacol[i].scale(Vector2f(0.3, 0.3));
+		obstacol[i].setTexture(CrateTexture);
+	}
+	int nr = -1;
+	for (int i = 0; i<14; i++)
+		for (int j = 0; j<23; j++)
+			if (matrix[i][j])
+				obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
+
 	RectangleShape healthBar, healthBarEmpty;
 	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned = false, speedSpawned = false, healthSpawned = false;
 	float planeSpeed = 0.0f, plane2Speed = 0.0f, TIMP=0, ammoSinceDespawn=0, healthSinceDespawn=0, speedSinceDespawn=0, ammoSinceSpawn=0, healthSinceSpawn=0, speedSinceSpawn=0;
-	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0;
+	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0, itemCurentDif = 1;
 
 
 	mainScreen.setKeyRepeatEnabled(true);
@@ -256,6 +312,55 @@ int main()
 				mainScreen.draw(optiunea[i]);
 			mainScreen.display();
 		}
+		else if (opt == 7)
+		{
+			sf::Event menuEvent;
+			while (mainScreen.pollEvent(menuEvent))
+			{
+				switch (menuEvent.type)
+				{
+				case Event::KeyPressed:
+					switch (menuEvent.key.code)
+					{
+					case::Keyboard::Up:
+						if (itemCurentDif>1)
+							moveUp(itemCurentDif, optiuneaDif, 5);
+						break;
+					case::Keyboard::Down:
+						moveDown(itemCurentDif, optiuneaDif, 5);
+						break;
+					case::Keyboard::Return:
+						switch (itemCurentDif)
+						{
+							break;
+						case 1:
+							opt = 5;
+							break;
+						case 2:
+							opt = 50;
+							break;
+						case 3:
+							opt = 100;
+							break;
+						case 4:
+							opt = 1;
+							break;
+						}
+						break;
+					}
+					break;
+				case sf::Event::Closed:
+					mainScreen.close();
+					break;
+				}
+			}
+
+			mainScreen.clear();
+			mainScreen.draw(resumeBackground);
+			for (int i = 0; i < 5; i++)
+				mainScreen.draw(optiuneaDif[i]);
+			mainScreen.display();
+		}
 		else
 			if (opt == 2)
 			{
@@ -280,7 +385,7 @@ int main()
 								opt = 3;
 								break;
 							case 1:
-								opt = 5;
+								opt = 7;
 								break;
 							case 2:
 								opt = 1;
@@ -526,7 +631,8 @@ int main()
 				string2 << "Speed: " << tankSpeed << " KM/H";
 				SpeedTank.setString(string2.str());
 				mainTank.drawPlayer(mainScreen);
-				mainScreen.draw(stone0);
+				for (int i = 0; i <= nr; i++)
+					mainScreen.draw(obstacol[i]);
 				mainScreen.draw(plane);
 				mainScreen.draw(plane2);
 				mainScreen.draw(healthLevel);
@@ -534,17 +640,35 @@ int main()
 				mainScreen.draw(healthBarEmpty);
 				mainScreen.draw(healthBar);
 				mainScreen.draw(HP);
-				if (ammoSinceSpawn > 6 && ammoSpawned == true)
+				for (int i = 0; i <= nr; i++)
+				{
+					if (ammoSpawned == true && ammoSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+					{
+						ammoSinceDespawn = 0;
+						ammoSpawned = false;
+					}
+					if (healthSpawned == true && healthSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+					{
+						healthSinceDespawn = 0;
+						healthSpawned = false;
+					}
+					if (speedSpawned == true && speedSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+					{
+						speedSinceDespawn = 0;
+						speedSpawned = false;
+					}
+				}
+				if (ammoSinceSpawn > 10 && ammoSpawned == true)
 				{
 					ammoSinceDespawn = 0;
 					ammoSpawned = false;
 				}
-				if (healthSinceSpawn > 7 && healthSpawned == true)
+				if (healthSinceSpawn > 11 && healthSpawned == true)
 				{
 					healthSinceDespawn = 0;
 					healthSpawned = false;
 				}
-				if (speedSinceSpawn > 5 && speedSpawned == true)
+				if (speedSinceSpawn > 13 && speedSpawned == true)
 				{
 					speedSinceDespawn = 0;
 					speedSpawned = false;
