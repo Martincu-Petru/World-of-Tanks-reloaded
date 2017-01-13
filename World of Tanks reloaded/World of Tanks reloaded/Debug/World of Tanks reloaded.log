@@ -53,40 +53,75 @@ c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\worl
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(195): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(201): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(212): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(241): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(249): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(504): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(506): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(521): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(523): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(536): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(538): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(540): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(549): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(551): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(553): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(564): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(566): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(568): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(578): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(588): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(591): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(605): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(608): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(623): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(668): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(673): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(686): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(692): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(696): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(700): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(705): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(715): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(801): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(820): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(836): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(859): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(877): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(225): warning C4101: 'Event': unreferenced local variable
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(243): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(251): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(506): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(508): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(523): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(525): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(538): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(540): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(542): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(551): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(553): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(555): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(566): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(568): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(570): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(580): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(590): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(593): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(607): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(610): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(625): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(670): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(675): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(688): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(694): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(698): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(702): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(707): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(717): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(803): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(822): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(838): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(861): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(879): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1103): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1105): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1120): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1122): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1135): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1137): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1139): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1148): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1150): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1152): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1163): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1165): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1167): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1177): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1184): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1187): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1201): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1204): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1219): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1264): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1269): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1282): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1288): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1292): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1296): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1301): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1311): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1368): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1374): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1378): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1382): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1397): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1413): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1436): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(1454): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(227): warning C4101: 'Event': unreferenced local variable
   World of Tanks reloaded.vcxproj -> C:\Users\lucia\Source\Repos\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.exe
   World of Tanks reloaded.vcxproj -> C:\Users\lucia\Source\Repos\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.pdb (Full PDB)

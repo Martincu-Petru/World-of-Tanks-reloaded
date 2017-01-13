@@ -210,30 +210,32 @@ int main()
 	unsigned int Y = mainTank.yMaxim();
 	//----------------------------------------------------FOR THE SECOND CHASER HEEEEEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE-----------------------------------
 	float chaser2X, chaser2Y, chaser2Rotation = chaser2.rotationOfChaser(), rotationNeeded2 = chaser2.rotationNeeded(tankX, tankY);
+	cout << "rotation Needed " << rotationNeeded2<<endl;
 	int variabila, okayGo2 = 0;
 	Bullet chaser2Bullets[3];
 	int chaser2CurrentBullet = 0, k;
 	int chaser2Life = 5;
+	float path2, changePath2;
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	bool c1Dead = false, c2Dead = false;
 	unsigned int explosionAnimation = 0, explosionAnimation2 = 0, explosionAnimationTank = 0;
-	explosion explosion;
+	explosion explosion, explosion2;
 	Text gameStatus;
 	Bullet bullets[10];
 	int currentBullet = 0, i;
 
 	Event Event;
-	Texture healthBarTexture, textureBackground,  planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
+	Texture healthBarTexture, textureBackground, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
 	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground, resumeBackground;
-	
+
 	Texture CrateTexture;
-	if(harta==1)
+	if (harta == 1)
 		CrateTexture.loadFromFile("crate.png");
 	else
-		if(harta==2)
+		if (harta == 2)
 			CrateTexture.loadFromFile("crate_2.png");
-		else 
-			if(harta==3)
+		else
+			if (harta == 3)
 				CrateTexture.loadFromFile("crate_3.png");
 	Sprite obstacol[100];
 	for (int i = 0; i < 100; i++)
@@ -243,8 +245,8 @@ int main()
 	}
 
 	int nr = -1;
-	for (int i = 0; i<14; i++)
-		for (int j = 0; j<23; j++)
+	for (int i = 0; i < 14; i++)
+		for (int j = 0; j < 23; j++)
 			if (matrix[i][j])
 				obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
 
@@ -252,8 +254,8 @@ int main()
 	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned = false, speedSpawned = false, healthSpawned = false;
-	float planeSpeed = 0.0f, plane2Speed = 0.0f, TIMP=0, ammoSinceDespawn=0, healthSinceDespawn=0, speedSinceDespawn=0, ammoSinceSpawn=0, healthSinceSpawn=0, speedSinceSpawn=0;
-	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0, itemCurentDif = 1;
+	float planeSpeed = 0.0f, plane2Speed = 0.0f, TIMP = 0, ammoSinceDespawn = 0, healthSinceDespawn = 0, speedSinceDespawn = 0, ammoSinceSpawn = 0, healthSinceSpawn = 0, speedSinceSpawn = 0;
+	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume = 0, itemCurentDif = 1;
 
 
 	mainScreen.setKeyRepeatEnabled(true);
@@ -374,7 +376,7 @@ int main()
 					switch (menuEvent.key.code)
 					{
 					case::Keyboard::Up:
-						if (itemCurentDif>1)
+						if (itemCurentDif > 1)
 							moveUp(itemCurentDif, optiuneaDif, 5);
 						break;
 					case::Keyboard::Down:
@@ -475,603 +477,1142 @@ int main()
 					opt = 3;
 				}
 				else
-			if (opt == 3)
-			{
-				healthLevel.setPosition(1017, 65);
-				SpeedTank.setPosition(1017, 100);
-
-				Time dt=timeGone.restart();
-
-				if(dt.asSeconds()<1)
-					TIMP = dt.asSeconds();
-				if (!ammoSpawned)
-					ammoSinceDespawn += TIMP;
-				if (!speedSpawned)
-					speedSinceDespawn += TIMP;
-				if (!healthSpawned)
-					healthSinceDespawn += TIMP;
-
-				if (ammoSpawned)
-					ammoSinceSpawn += TIMP;
-				if (speedSpawned)
-					speedSinceSpawn += TIMP;
-				if (healthSpawned)
-					healthSinceSpawn += TIMP;
-
-				if (!planeActive)
-				{
-					srand((int)time(0));
-					planeSpeed = rand() % 200 + 200;
-					srand((int)time(0) * 10);
-					float height = rand() % 500 + 100;
-					plane.setPosition(1400, height);
-					if (rand() % 10 == 9)
-						planeActive = true;
-				}
-				else
-				{
-					plane.setPosition(plane.getPosition().x - (planeSpeed * TIMP), plane.getPosition().y);
-					if (plane.getPosition().x < -200)
-						planeActive = false;
-				}
-
-				if (!plane2Active)
-				{
-					srand((int)time(0));
-					plane2Speed = rand() % 200 + 200;
-					srand((int)time(0) * 10);
-					float height2 = rand() % 500 + 100;
-					plane2.setPosition(-1400, height2);
-					if (rand() % 7 == 0)
-						plane2Active = true;
-				}
-				else
-				{
-				if(opt==3)plane2.setPosition(plane2.getPosition().x + (plane2Speed * TIMP), plane2.getPosition().y);
-					if (plane2.getPosition().x > 1400)
-						plane2Active = false;
-				}
-				if (!ammoSpawned && ammoSinceDespawn > 5)
-				{
-					srand(time(0)*ammoSinceDespawn);
-					int x = rand() % 1200 + 100;
-					srand(time(0)*ammoSinceDespawn + 3.14);
-					int y = rand() % 500 + 10;
-					ammoSprite.setPosition(x, y);
-					if (!(healthSpawned == true && abs(x - healthSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
+					if (opt == 3)
 					{
-						ammoSpawned = true;
-						ammoSinceSpawn = 0;
-					}
-				}
-				if (!healthSpawned && healthSinceDespawn > 6)
-				{
-					srand(time(0)*healthSinceDespawn);
-					int x = rand() % 1200 + 100;
-					srand(time(0)*healthSinceDespawn + 3.14);
-					int y = rand() % 500 + 10;
-					healthSprite.setPosition(x, y);
-					if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
-					{
-						healthSpawned = true;
-						healthSinceSpawn = 0;
-					}
+						healthLevel.setPosition(1017, 65);
+						SpeedTank.setPosition(1017, 100);
 
+						Time dt = timeGone.restart();
 
-				}
-				if (!speedSpawned && speedSinceDespawn > 4)
-				{
-					srand(time(0)*speedSinceDespawn);
-					int x = rand() % 1200 + 100;
-					srand(time(0)*speedSinceDespawn + 3.14);
-					int y = rand() % 500 + 10;
-					speedSprite.setPosition(x, y);
-					if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - healthSprite.getPosition().x) < 300 && healthSpawned == true))
-					{
-						speedSpawned = true;
-						speedSinceSpawn = 0;
-					}
-				}
+						if (dt.asSeconds() < 1)
+							TIMP = dt.asSeconds();
+						if (!ammoSpawned)
+							ammoSinceDespawn += TIMP;
+						if (!speedSpawned)
+							speedSinceDespawn += TIMP;
+						if (!healthSpawned)
+							healthSinceDespawn += TIMP;
 
-				float tankSpeed = 0;
+						if (ammoSpawned)
+							ammoSinceSpawn += TIMP;
+						if (speedSpawned)
+							speedSinceSpawn += TIMP;
+						if (healthSpawned)
+							healthSinceSpawn += TIMP;
 
-				healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
-
-				//mainAI.BuildPathToTarget(mainTank.getXorigin(), mainTank.getYorigin());
-				if (mainTank.checkIfAlive())
-				{
-					//first we have to handle the player's input
-					if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
-					{
-						//	cout << endl << " DA " << endl;
-						mainTank.movePlayer('u', nr, obstacol); //era 1.5 peste tot dar tancul se misca prea repede
-						tankSpeed = rand() % 1000;
-						tankSpeed /= 1000;
-						tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
-						srand(time(0));
-						tankSpeed += rand() % 5;
-					}
-					else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
-					{
-						mainTank.movePlayer('l', nr, obstacol);
-					}
-					else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
-					{
-						mainTank.movePlayer('r', nr, obstacol);
-					}
-					else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
-					{
-						mainTank.movePlayer('d', nr, obstacol);
-						tankSpeed = rand() % 1000;
-						tankSpeed /= 1000;
-						tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
-						srand(time(0));
-						tankSpeed += rand() % 5;
-					}
-
-					// Fire a bullet
-					if (Keyboard::isKeyPressed(Keyboard::Space))
-					{
-						if (bullets[currentBullet].isInFlight() != true)
+						if (!planeActive)
 						{
-							float tankXX;
-							float tankYY;
-							mainTank.goodPoint(tankXX, tankYY);
-							double rotation = (double)mainTank.rotationOfPlayer();
-							bullets[currentBullet].thirdPoint(tankXX, tankYY, rotation, xOrigin, yOrigin, X, Y);
-
-							bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin, rotation);
-							currentBullet++;
-							if (currentBullet >= playerNumberBullets)
-							{
-								currentBullet = 0;
-							}
-						}
-
-					}
-					tankX = mainTank.getXorigin();
-					tankY = mainTank.getYorigin();
-				}
-
-				if (Keyboard::isKeyPressed(Keyboard::Escape))
-				{
-					opt = 1;
-				}
-				double chaserRotation = (double)chaser.rotationOfChaser();
-
-
-				if (chaserLife > 0)
-				{
-					if (!chaser.isInMotion())
-					{
-						double A, D;
-						if (chaserRotation > rotationNeeded && okayGo == 0)
-						{
-							A = chaserRotation - rotationNeeded;
-							D = 360 - A;
-						}
-						else if (chaserRotation < rotationNeeded && okayGo == 0)
-						{
-							D = rotationNeeded - chaserRotation;
-							A = 360 - D;
-						}
-						if (A > D && !okayGo)
-						{
-							okayGo = 1;
-						}
-						else if (A < D && !okayGo)
-						{
-							okayGo = 2;
-						}
-						if (okayGo == 1)
-						{
-							chaser.moveChaser('r', 0.15);
-							chaser.rotate();
-						}
-						else if (okayGo == 2)
-						{
-							chaser.moveChaser('l', 0.15);
-							chaser.rotate();
-						}
-					}
-					if (abs(chaserRotation - rotationNeeded) < 1.5 && !chaser.isInMotion())
-					{
-						chaser.doNotRotate();
-						okayGo = 0;
-						path = chaser.pathToPlayer(tankX, tankY);
-						changePath = path;
-					}
-					if (chaser.isInMotion() && path != 0)
-					{
-						chaser.moveChaser('d', 0.15);
-						path--;
-					}
-					if (path < 0)
-					{
-						chaser.rotate();
-						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-					}
-					else if ((changePath - path  > 0) && (changePath - path < 3))
-					{
-						chaser.moveChaser('l', 0.2);
-						chaser.rotate();
-						tankX = mainTank.getXorigin();
-						tankY = mainTank.getYorigin();
-						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-					}
-					int x = rand() % 10;
-					if (x % 7 == 0 )
-					{
-						chaser.moveChaser('r', 0.2);
-						chaser.rotate();
-						if (chaserBullets[chaserCurrentBullet].isInFlight() != true)
-						{
-							//the next section will calculate the direction in which the bullet is fired
-							float chaserXX = chaser.getXorigin();
-							float chaserYY = chaser.getYorigin();
-							chaser.goodPoint(chaserXX, chaserYY);
-							double rotation = (double)chaser.rotationOfChaser();
-							chaserBullets[chaserCurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
-							chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
-							chaserCurrentBullet++;
-							if (chaserCurrentBullet > 1)
-							{
-								chaserCurrentBullet = 0;
-							}
-						}
-					}
-				}
-				//-----------------------------chaser 2 try --------------------------------chaser 2 try--------------------------------chaser 2 try-----------
-				if (chaser2Life > 0)
-				{
-					if (!chaser2.isInMotion())
-					{
-						double A2, D2;
-						if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
-						{
-							A2 = chaser2Rotation - rotationNeeded2;
-							D2 = 360 - A2;
-						}
-						else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
-						{
-							D2 = rotationNeeded2 - chaser2Rotation;
-							A2 = 360 - D2;
-						}
-						if (A2 > D2 && !okayGo2)
-						{
-							okayGo2 = 1;
-						}
-						else if (A2 < D2 && !okayGo2)
-						{
-							okayGo2 = 2;
-						}
-						if (okayGo == 1)
-						{
-							chaser2.moveChaser('r', 1.5);
-							chaser2.rotate();
-						}
-						else if (okayGo2 == 2)
-						{
-							chaser2.moveChaser('l', 1.5);
-							chaser2.rotate();
-						}
-					}
-					//------------------------------------------------DE AICI INCEPE RANDOM MOVEMENT------------------------------------------------------------------------
-					if (abs(chaser2Rotation - rotationNeeded2) < 1 && !chaser2.isInMotion())
-					{
-						if (chaser2Rotation < 100 && chaser2Rotation > 230 || (chaser2Rotation > 250 || chaser2Rotation < 20))
-						{
-							variabila = rand() % 1000;
-							while (variabila < 200)
-							{
-								variabila = rand() % 1000;
-							}
+							srand((int)time(0));
+							planeSpeed = rand() % 200 + 200;
+							srand((int)time(0) * 10);
+							float height = rand() % 500 + 100;
+							plane.setPosition(1400, height);
+							if (rand() % 10 == 9)
+								planeActive = true;
 						}
 						else
 						{
-							variabila = rand() % 400;
-							while (variabila < 200)
-							{
-								variabila = rand() % 500;
-							}
+							plane.setPosition(plane.getPosition().x - (planeSpeed * TIMP), plane.getPosition().y);
+							if (plane.getPosition().x < -200)
+								planeActive = false;
 						}
-						chaser2.doNotRotate();
-					}
-					if (variabila != 0 && chaser2.isInMotion() && variabila % 2 == 0)
-					{
-						chaser2.moveChaser('u', 1.5);
-						variabila -= 2;
-					}
-					else if (variabila % 2 == 1)
-					{
-						chaser2.moveChaser('d', 1.5);
-						if (variabila == 1)
+
+						if (!plane2Active)
 						{
-							variabila = 0;
+							srand((int)time(0));
+							plane2Speed = rand() % 200 + 200;
+							srand((int)time(0) * 10);
+							float height2 = rand() % 500 + 100;
+							plane2.setPosition(-1400, height2);
+							if (rand() % 7 == 0)
+								plane2Active = true;
 						}
 						else
 						{
-							variabila -= 2;
+							if (opt == 3)plane2.setPosition(plane2.getPosition().x + (plane2Speed * TIMP), plane2.getPosition().y);
+							if (plane2.getPosition().x > 1400)
+								plane2Active = false;
 						}
-					}
-					if (variabila < 10)
-					{
-						chaser2.rotate();
-						okayGo2 = 0;
-						rotationNeeded2 = rand() % 360;
-						if (chaser2Rotation > rotationNeeded2)
+						if (!ammoSpawned && ammoSinceDespawn > 5)
 						{
-							okayGo2 = 2;
-						}
-					}
-
-
-					int x = rand() % 11;
-					if (x % 10 == 0)
-					{
-						if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)
-						{
-							//the next section will calculate the direction in which the bullet is fired
-							float chaser2XX = chaser2.getXorigin();
-							float chaser2YY = chaser2.getYorigin();
-							chaser2.goodPoint(chaser2XX, chaser2YY);
-							double rotation = (double)chaser2.rotationOfChaser();
-							chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaser2XX, chaser2YY, chaserRotation, xOrigin, yOrigin, X, Y);
-							chaser2Bullets[chaser2CurrentBullet].shoot(chaser2XX, chaser2YY, xOrigin, yOrigin, chaserRotation);
-							chaser2CurrentBullet++;
-							if (chaser2CurrentBullet > 1)
+							srand(time(0)*ammoSinceDespawn);
+							int x = rand() % 1200 + 100;
+							srand(time(0)*ammoSinceDespawn + 3.14);
+							int y = rand() % 500 + 10;
+							ammoSprite.setPosition(x, y);
+							if (!(healthSpawned == true && abs(x - healthSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 							{
-								chaser2CurrentBullet = 0;
+								ammoSpawned = true;
+								ammoSinceSpawn = 0;
 							}
 						}
-					}
-				}
-
-				// Actualizarea pt bullets in-flight
-				for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
-				{
-					
-					if (bullets[i].isInFlight())
-					{
-						bullets[i].update(0.15);
-						if (chaser.checkIfIntersect(bullets[i].getShape()) && chaserLife > 0)
+						if (!healthSpawned && healthSinceDespawn > 6)
 						{
-							chaserLife--;
-							bullets[i].stop();
-						}
-						else if (chaser2.checkIfIntersect(bullets[i].getShape()) && chaser2Life > 0)
-						{
-							chaser2Life--;
-							bullets[i].stop();
-						}
-						if (bullets[i].intersect(obstacol, nr))
-						{
-							bullets[i].stop();
-						}
-					}
-				}
-
-				//CHASERs BULLETS UPDATE MOVEMENT -----------------------------------------------------------------------------
-				for (j = 0; j < 2 && chaserLife > 0; j++)
-				{
-					if (chaserBullets[j].isInFlight())
-					{
-						chaserBullets[j].update(0.15);
-						int oki = 1;
-						
-						if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive() && oki)
-						{
-							mainTank.lessHealth();
-							chaserBullets[j].stop();
-						}
-						if (chaserBullets[j].intersect(obstacol, nr))
-						{
-							chaserBullets[j].stop();
-						}
-					}
-				}
-				for (k = 0; k < 1 && chaser2Life > 0; k++)
-				{
-					if (chaser2Bullets[k].isInFlight())
-					{
-						chaser2Bullets[k].update(0.15);
-						if (chaser2Bullets[k].intersect(obstacol, nr))
-						{
-							chaser2Bullets[k].stop();
-						}
-						if (mainTank.checkIfIntersect(chaser2Bullets[k].getShape()) && mainTank.checkIfAlive())
-						{
-							mainTank.lessHealth();
-							chaser2Bullets[k].stop();
-						}
-					}
-				}
-				mainScreen.clear();
-				mainScreen.draw(spriteBackground);
-				stringstream string1, string2, string3;
-				string1 << "Integrity: " << mainTank.getHealth();
-				healthLevel.setString(string1.str());
-				string2 << "Speed: " << tankSpeed << " KM/H";
-				SpeedTank.setString(string2.str());
-				for (int i = 0; i <= nr; i++)
-					mainScreen.draw(obstacol[i]);
-
-				mainScreen.draw(healthLevel);
-				mainScreen.draw(SpeedTank);
-				mainScreen.draw(healthBarEmpty);
-				mainScreen.draw(healthBar);
-				mainScreen.draw(HP);
-
-				if (mainTank.checkIfAlive())
-				{
-					mainTank.drawPlayer(mainScreen);
-				}
-				else
-				{
-					explosionAnimationTank += 1;
-					bool boomTank = explosion.animation(explosionAnimationTank);
-					explosion.drawExplosion(mainScreen, boomTank, tankX, tankY);
-					string3 << "GAME OVER";
-					gameStatus.setString(string3.str());
-					gameStatus.setPosition(400, 320);
-					mainScreen.draw(gameStatus);
-				}
-
-				for (int i = 0; i <= nr; i++)
-				{
-					if (ammoSpawned == true && ammoSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
-					{
-						ammoSinceDespawn = 0;
-						ammoSpawned = false;
-					}
-					if (healthSpawned == true && healthSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
-					{
-						healthSinceDespawn = 0;
-						healthSpawned = false;
-					}
-					if (speedSpawned == true && speedSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
-					{
-						speedSinceDespawn = 0;
-						speedSpawned = false;
-					}
-				}
-				if (ammoSinceSpawn > 10 && ammoSpawned == true)
-				{
-					ammoSinceDespawn = 0;
-					ammoSpawned = false;
-				}
-				if (healthSinceSpawn > 11 && healthSpawned == true)
-				{
-					healthSinceDespawn = 0;
-					healthSpawned = false;
-				}
-				if (speedSinceSpawn > 13 && speedSpawned == true)
-				{
-					speedSinceDespawn = 0;
-					speedSpawned = false;
-				}
-				if (mainTank.checkIfIntersect(ammoSprite))
-				{
-					ammoSpawned = false;
-					ammoSinceDespawn = 0;
-				}
-				if (mainTank.checkIfIntersect(healthSprite) && healthSpawned)
-				{
-					mainTank.updateHealth();
-					healthSpawned = false;
-					healthSinceDespawn = 0;
-				}
-				if (mainTank.checkIfIntersect(speedSprite) && speedSpawned)
-				{
-					mainTank.updateSpeed();
-					speedSpawned = false;
-					speedSinceDespawn = 0;
-				}
-				if (ammoSpawned)
-					mainScreen.draw(ammoSprite);
-				if (healthSpawned)
-					mainScreen.draw(healthSprite);
-				if (speedSpawned)
-					mainScreen.draw(speedSprite);
-
-				for (i = 0; i < 2; ++i)
-				{
-					if (bullets[i].isInFlight())
-					{
-						mainScreen.draw(bullets[i].getShape());
-					}
-				}
-				//CHASER BULLETS DRAW ON MAIN SCREEN ------------------------
-				for (j = 0; j < 1; ++j)
-				{
-					if (chaserBullets[j].isInFlight())
-					{
-						mainScreen.draw(chaserBullets[j].getShape());
-					}
-				}
-				for (k = 0; k < 1; ++k)
-				{
-					if (chaser2Bullets[k].isInFlight())
-					{
-						mainScreen.draw(chaser2Bullets[k].getShape());
-					}
-				}
-
-				//mainAI.draw_ai_Entity(mainScreen); we don't have this entity yet
-				if (chaserLife > 0)
-				{
-					chaser.drawAI_Chaser(mainScreen, 1);
-				}
-				else
-				{
-					c1Dead = true;
-					explosionAnimation += 1;
-					chaserX = chaser.getXorigin();
-					chaserY = chaser.getYorigin();
-					bool boom = explosion.animation(explosionAnimation);
-					explosion.drawExplosion(mainScreen, boom, chaserX, chaserY);
-				}
-
-				if (chaser2Life > 0)
-				{
-					chaser2.drawAI_Chaser(mainScreen, 2);
-				}
-				else
-				{
-					c2Dead = true;
-					explosionAnimation2 += 1;
-					chaser2X = chaser2.getXorigin();
-					chaser2Y = chaser2.getYorigin();
-					bool boom2 = explosion.animation(explosionAnimation);
-					explosion.drawExplosion(mainScreen, boom2, chaser2X, chaser2Y);
-				}
-				if (c1Dead && c2Dead)
-				{
-					string3 << "YOU WON, CONGRATZ!";
-					gameStatus.setString(string3.str());
-					gameStatus.setPosition(200, 320);
-					mainScreen.draw(gameStatus);
-				}
-				mainScreen.draw(plane);
-				mainScreen.draw(plane2);
-				mainScreen.display();
-			}
-			else 
-				if (opt == 4)
-				{
-					sf::Event menuEvent;
-					while (mainScreen.pollEvent(menuEvent))
-						switch (menuEvent.type)
-						{
-						case Event::KeyPressed:
-							switch (menuEvent.key.code)
+							srand(time(0)*healthSinceDespawn);
+							int x = rand() % 1200 + 100;
+							srand(time(0)*healthSinceDespawn + 3.14);
+							int y = rand() % 500 + 10;
+							healthSprite.setPosition(x, y);
+							if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
 							{
-							case::Keyboard::Left:
-								moveLeft(itemCurentExit, optiuneaExit);
-								break;
-							case::Keyboard::Right:
-								moveRight(itemCurentExit, optiuneaExit);
-								break;
-							case::Keyboard::Return:
-								switch (itemCurentExit)
+								healthSpawned = true;
+								healthSinceSpawn = 0;
+							}
+
+
+						}
+						if (!speedSpawned && speedSinceDespawn > 4)
+						{
+							srand(time(0)*speedSinceDespawn);
+							int x = rand() % 1200 + 100;
+							srand(time(0)*speedSinceDespawn + 3.14);
+							int y = rand() % 500 + 10;
+							speedSprite.setPosition(x, y);
+							if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - healthSprite.getPosition().x) < 300 && healthSpawned == true))
+							{
+								speedSpawned = true;
+								speedSinceSpawn = 0;
+							}
+						}
+
+						float tankSpeed = 0;
+
+						healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
+
+						//mainAI.BuildPathToTarget(mainTank.getXorigin(), mainTank.getYorigin());
+						if (mainTank.checkIfAlive())
+						{
+							//first we have to handle the player's input
+							if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
+							{
+								//	cout << endl << " DA " << endl;
+								mainTank.movePlayer('u', nr, obstacol); //era 1.5 peste tot dar tancul se misca prea repede
+								tankSpeed = rand() % 1000;
+								tankSpeed /= 1000;
+								tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
+								srand(time(0));
+								tankSpeed += rand() % 5;
+							}
+							else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
+							{
+								mainTank.movePlayer('l', nr, obstacol);
+							}
+							else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
+							{
+								mainTank.movePlayer('r', nr, obstacol);
+							}
+							else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
+							{
+								mainTank.movePlayer('d', nr, obstacol);
+								tankSpeed = rand() % 1000;
+								tankSpeed /= 1000;
+								tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
+								srand(time(0));
+								tankSpeed += rand() % 5;
+							}
+
+							// Fire a bullet
+							if (Keyboard::isKeyPressed(Keyboard::Space))
+							{
+								if (bullets[currentBullet].isInFlight() != true)
 								{
-								case 1:
-									return 0;
-									break;
-								case 2:
-									opt = 1;
+									float tankXX;
+									float tankYY;
+									mainTank.goodPoint(tankXX, tankYY);
+									double rotation = (double)mainTank.rotationOfPlayer();
+									bullets[currentBullet].thirdPoint(tankXX, tankYY, rotation, xOrigin, yOrigin, X, Y);
+
+									bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin, rotation);
+									currentBullet++;
+									if (currentBullet >= playerNumberBullets)
+									{
+										currentBullet = 0;
+									}
+								}
+
+							}
+							tankX = mainTank.getXorigin();
+							tankY = mainTank.getYorigin();
+						}
+
+						if (Keyboard::isKeyPressed(Keyboard::Escape))
+						{
+							opt = 1;
+						}
+						double chaserRotation = (double)chaser.rotationOfChaser();
+
+
+						if (chaserLife > 0)
+						{
+							if (!chaser.isInMotion())
+							{
+								double A, D;
+								if (chaserRotation > rotationNeeded && okayGo == 0)
+								{
+									A = chaserRotation - rotationNeeded;
+									D = 360 - A;
+								}
+								else if (chaserRotation < rotationNeeded && okayGo == 0)
+								{
+									D = rotationNeeded - chaserRotation;
+									A = 360 - D;
+								}
+								if (A > D && !okayGo)
+								{
+									okayGo = 1;
+								}
+								else if (A < D && !okayGo)
+								{
+									okayGo = 2;
+								}
+								if (okayGo == 1)
+								{
+									chaser.moveChaser('r', 0.15);
+									chaser.rotate();
+								}
+								else if (okayGo == 2)
+								{
+									chaser.moveChaser('l', 0.15);
+									chaser.rotate();
+								}
+							}
+							if (abs(chaserRotation - rotationNeeded) < 1.5 && !chaser.isInMotion())
+							{
+								chaser.doNotRotate();
+								okayGo = 0;
+								path = chaser.pathToPlayer(tankX, tankY);
+								changePath = path;
+							}
+							if (chaser.isInMotion() && path != 0)
+							{
+								chaser.moveChaser('d', 0.15);
+								path--;
+							}
+							if (path < 0)
+							{
+								chaser.rotate();
+								rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+							}
+							else if ((changePath - path > 0) && (changePath - path < 3))
+							{
+								chaser.moveChaser('l', 0.2);
+								chaser.rotate();
+								tankX = mainTank.getXorigin();
+								tankY = mainTank.getYorigin();
+								rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+							}
+							int x = rand() % 10;
+							if (x % 7 == 0)
+							{
+								chaser.moveChaser('r', 0.2);
+								chaser.rotate();
+								if (chaserBullets[chaserCurrentBullet].isInFlight() != true)
+								{
+									//the next section will calculate the direction in which the bullet is fired
+									float chaserXX = chaser.getXorigin();
+									float chaserYY = chaser.getYorigin();
+									chaser.goodPoint(chaserXX, chaserYY);
+									double rotation = (double)chaser.rotationOfChaser();
+									chaserBullets[chaserCurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
+									chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
+									chaserCurrentBullet++;
+									if (chaserCurrentBullet > 1)
+									{
+										chaserCurrentBullet = 0;
+									}
+								}
+							}
+						}
+						//-----------------------------chaser 2 try --------------------------------chaser 2 try--------------------------------chaser 2 try-----------
+						if (chaser2Life > 0)
+						{
+							if (!chaser2.isInMotion())
+							{
+								double A2, D2;
+								if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
+								{
+									A2 = chaser2Rotation - rotationNeeded2;
+									D2 = 360 - A2;
+								}
+								else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
+								{
+									D2 = rotationNeeded2 - chaser2Rotation;
+									A2 = 360 - D2;
+								}
+								if (A2 > D2 && !okayGo2)
+								{
+									okayGo2 = 1;
+								}
+								else if (A2 < D2 && !okayGo2)
+								{
+									okayGo2 = 2;
+								}
+								if (okayGo2 == 1)
+								{
+									chaser2.moveChaser('r', 1.5);
+									chaser2.rotate();
+								}
+								else if (okayGo2 == 2)
+								{
+									chaser2.moveChaser('l', 1.5);
+									chaser2.rotate();
+								}
+							}
+							//------------------------------------------------DE AICI INCEPE RANDOM MOVEMENT------------------------------------------------------------------------
+							if (abs(chaser2Rotation - rotationNeeded2) < 1 && !chaser2.isInMotion())
+							{
+								if (chaser2Rotation < 100 && chaser2Rotation > 230 || (chaser2Rotation > 250 || chaser2Rotation < 20))
+								{
+									variabila = rand() % 1000;
+									while (variabila < 200)
+									{
+										variabila = rand() % 1000;
+									}
+								}
+								else
+								{
+									variabila = rand() % 400;
+									while (variabila < 200)
+									{
+										variabila = rand() % 500;
+									}
+								}
+								chaser2.doNotRotate();
+							}
+							if (variabila != 0 && chaser2.isInMotion() && variabila % 2 == 0)
+							{
+								chaser2.moveChaser('u', 1.5);
+								variabila -= 2;
+							}
+							else if (variabila % 2 == 1)
+							{
+								chaser2.moveChaser('d', 1.5);
+								if (variabila == 1)
+								{
+									variabila = 0;
+								}
+								else
+								{
+									variabila -= 2;
+								}
+							}
+							if (variabila < 10)
+							{
+								chaser2.rotate();
+								okayGo2 = 0;
+								rotationNeeded2 = rand() % 360;
+								if (chaser2Rotation > rotationNeeded2)
+								{
+									okayGo2 = 2;
+								}
+							}
+
+
+							int x = rand() % 11;
+							if (x % 10 == 0)
+							{
+								if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)
+								{
+									//the next section will calculate the direction in which the bullet is fired
+									float chaser2XX = chaser2.getXorigin();
+									float chaser2YY = chaser2.getYorigin();
+									chaser2.goodPoint(chaser2XX, chaser2YY);
+									double rotation = (double)chaser2.rotationOfChaser();
+									chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaser2XX, chaser2YY, chaserRotation, xOrigin, yOrigin, X, Y);
+									chaser2Bullets[chaser2CurrentBullet].shoot(chaser2XX, chaser2YY, xOrigin, yOrigin, chaserRotation);
+									chaser2CurrentBullet++;
+									if (chaser2CurrentBullet > 1)
+									{
+										chaser2CurrentBullet = 0;
+									}
+								}
+							}
+						}
+
+						// Actualizarea pt bullets in-flight
+						for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
+						{
+
+							if (bullets[i].isInFlight())
+							{
+								bullets[i].update(0.15);
+								if (chaser.checkIfIntersect(bullets[i].getShape()) && chaserLife > 0)
+								{
+									chaserLife--;
+									bullets[i].stop();
+								}
+								else if (chaser2.checkIfIntersect(bullets[i].getShape()) && chaser2Life > 0)
+								{
+									chaser2Life--;
+									bullets[i].stop();
+								}
+								if (bullets[i].intersect(obstacol, nr))
+								{
+									bullets[i].stop();
+								}
+							}
+						}
+
+						//CHASERs BULLETS UPDATE MOVEMENT -----------------------------------------------------------------------------
+						for (j = 0; j < 2 && chaserLife > 0; j++)
+						{
+							if (chaserBullets[j].isInFlight())
+							{
+								chaserBullets[j].update(0.15);
+								int oki = 1;
+
+								if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive() && oki)
+								{
+									mainTank.lessHealth();
+									chaserBullets[j].stop();
+								}
+								if (chaserBullets[j].intersect(obstacol, nr))
+								{
+									chaserBullets[j].stop();
+								}
+							}
+						}
+						for (k = 0; k < 1 && chaser2Life > 0; k++)
+						{
+							if (chaser2Bullets[k].isInFlight())
+							{
+								chaser2Bullets[k].update(0.15);
+								if (chaser2Bullets[k].intersect(obstacol, nr))
+								{
+									chaser2Bullets[k].stop();
+								}
+								if (mainTank.checkIfIntersect(chaser2Bullets[k].getShape()) && mainTank.checkIfAlive())
+								{
+									mainTank.lessHealth();
+									chaser2Bullets[k].stop();
+								}
+							}
+						}
+						mainScreen.clear();
+						mainScreen.draw(spriteBackground);
+						stringstream string1, string2, string3;
+						string1 << "Integrity: " << mainTank.getHealth();
+						healthLevel.setString(string1.str());
+						string2 << "Speed: " << tankSpeed << " KM/H";
+						SpeedTank.setString(string2.str());
+						for (int i = 0; i <= nr; i++)
+							mainScreen.draw(obstacol[i]);
+
+						mainScreen.draw(healthLevel);
+						mainScreen.draw(SpeedTank);
+						mainScreen.draw(healthBarEmpty);
+						mainScreen.draw(healthBar);
+						mainScreen.draw(HP);
+
+						if (mainTank.checkIfAlive())
+						{
+							mainTank.drawPlayer(mainScreen);
+						}
+						else
+						{
+							explosionAnimationTank += 1;
+							bool boomTank = explosion.animation(explosionAnimationTank);
+							explosion.drawExplosion(mainScreen, boomTank, tankX, tankY);
+							string3 << "GAME OVER";
+							gameStatus.setString(string3.str());
+							gameStatus.setPosition(400, 320);
+							mainScreen.draw(gameStatus);
+						}
+
+						for (int i = 0; i <= nr; i++)
+						{
+							if (ammoSpawned == true && ammoSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+							{
+								ammoSinceDespawn = 0;
+								ammoSpawned = false;
+							}
+							if (healthSpawned == true && healthSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+							{
+								healthSinceDespawn = 0;
+								healthSpawned = false;
+							}
+							if (speedSpawned == true && speedSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+							{
+								speedSinceDespawn = 0;
+								speedSpawned = false;
+							}
+						}
+						if (ammoSinceSpawn > 10 && ammoSpawned == true)
+						{
+							ammoSinceDespawn = 0;
+							ammoSpawned = false;
+						}
+						if (healthSinceSpawn > 11 && healthSpawned == true)
+						{
+							healthSinceDespawn = 0;
+							healthSpawned = false;
+						}
+						if (speedSinceSpawn > 13 && speedSpawned == true)
+						{
+							speedSinceDespawn = 0;
+							speedSpawned = false;
+						}
+						if (mainTank.checkIfIntersect(ammoSprite))
+						{
+							ammoSpawned = false;
+							ammoSinceDespawn = 0;
+						}
+						if (mainTank.checkIfIntersect(healthSprite) && healthSpawned)
+						{
+							mainTank.updateHealth();
+							healthSpawned = false;
+							healthSinceDespawn = 0;
+						}
+						if (mainTank.checkIfIntersect(speedSprite) && speedSpawned)
+						{
+							mainTank.updateSpeed();
+							speedSpawned = false;
+							speedSinceDespawn = 0;
+						}
+						if (ammoSpawned)
+							mainScreen.draw(ammoSprite);
+						if (healthSpawned)
+							mainScreen.draw(healthSprite);
+						if (speedSpawned)
+							mainScreen.draw(speedSprite);
+
+						for (i = 0; i < 2; ++i)
+						{
+							if (bullets[i].isInFlight())
+							{
+								mainScreen.draw(bullets[i].getShape());
+							}
+						}
+						//CHASER BULLETS DRAW ON MAIN SCREEN ------------------------
+						for (j = 0; j < 1; ++j)
+						{
+							if (chaserBullets[j].isInFlight())
+							{
+								mainScreen.draw(chaserBullets[j].getShape());
+							}
+						}
+						for (k = 0; k < 1; ++k)
+						{
+							if (chaser2Bullets[k].isInFlight())
+							{
+								mainScreen.draw(chaser2Bullets[k].getShape());
+							}
+						}
+
+						//mainAI.draw_ai_Entity(mainScreen); we don't have this entity yet
+						if (chaserLife > 0)
+						{
+							chaser.drawAI_Chaser(mainScreen, 1);
+						}
+						else
+						{
+							c1Dead = true;
+							explosionAnimation += 1;
+							chaserX = chaser.getXorigin();
+							chaserY = chaser.getYorigin();
+							bool boom = explosion.animation(explosionAnimation);
+							explosion.drawExplosion(mainScreen, boom, chaserX, chaserY);
+						}
+
+						if (chaser2Life > 0)
+						{
+							chaser2.drawAI_Chaser(mainScreen, 2);
+						}
+						else
+						{
+							c2Dead = true;
+							explosionAnimation2 += 1;
+							chaser2X = chaser2.getXorigin();
+							chaser2Y = chaser2.getYorigin();
+							bool boom2 = explosion.animation(explosionAnimation);
+							explosion.drawExplosion(mainScreen, boom2, chaser2X, chaser2Y);
+						}
+						if (c1Dead && c2Dead)
+						{
+							string3 << "YOU WON, CONGRATZ!";
+							gameStatus.setString(string3.str());
+							gameStatus.setPosition(200, 320);
+							mainScreen.draw(gameStatus);
+						}
+						mainScreen.draw(plane);
+						mainScreen.draw(plane2);
+						mainScreen.display();
+					}
+					else
+						if (opt == 4)
+						{
+							sf::Event menuEvent;
+							while (mainScreen.pollEvent(menuEvent))
+								switch (menuEvent.type)
+								{
+								case Event::KeyPressed:
+									switch (menuEvent.key.code)
+									{
+									case::Keyboard::Left:
+										moveLeft(itemCurentExit, optiuneaExit);
+										break;
+									case::Keyboard::Right:
+										moveRight(itemCurentExit, optiuneaExit);
+										break;
+									case::Keyboard::Return:
+										switch (itemCurentExit)
+										{
+										case 1:
+											return 0;
+											break;
+										case 2:
+											opt = 1;
+											break;
+										}
+										break;
+									}
 									break;
 								}
-								break;
-							}
-							break;
+							mainScreen.clear();
+							mainScreen.draw(menuExitBackground);
+							for (int i = 0; i < 3; i++)
+								mainScreen.draw(optiuneaExit[i]);
+							mainScreen.display();
 						}
-					mainScreen.clear();
-					mainScreen.draw(menuExitBackground);
-					for (int i = 0; i < 3; i++)
-						mainScreen.draw(optiuneaExit[i]);
-					mainScreen.display();
-				}
+						else if (opt == 50)
+						{
+							{							healthLevel.setPosition(1017, 65);
+							SpeedTank.setPosition(1017, 100);
+
+							Time dt = timeGone.restart();
+
+							if (dt.asSeconds() < 1)
+								TIMP = dt.asSeconds();
+							if (!ammoSpawned)
+								ammoSinceDespawn += TIMP;
+							if (!speedSpawned)
+								speedSinceDespawn += TIMP;
+							if (!healthSpawned)
+								healthSinceDespawn += TIMP;
+
+							if (ammoSpawned)
+								ammoSinceSpawn += TIMP;
+							if (speedSpawned)
+								speedSinceSpawn += TIMP;
+							if (healthSpawned)
+								healthSinceSpawn += TIMP;
+
+							if (!planeActive)
+							{
+								srand((int)time(0));
+								planeSpeed = rand() % 200 + 200;
+								srand((int)time(0) * 10);
+								float height = rand() % 500 + 100;
+								plane.setPosition(1400, height);
+								if (rand() % 10 == 9)
+									planeActive = true;
+							}
+							else
+							{
+								plane.setPosition(plane.getPosition().x - (planeSpeed * TIMP), plane.getPosition().y);
+								if (plane.getPosition().x < -200)
+									planeActive = false;
+							}
+
+							if (!plane2Active)
+							{
+								srand((int)time(0));
+								plane2Speed = rand() % 200 + 200;
+								srand((int)time(0) * 10);
+								float height2 = rand() % 500 + 100;
+								plane2.setPosition(-1400, height2);
+								if (rand() % 7 == 0)
+									plane2Active = true;
+							}
+							else
+							{
+								if (opt == 3)plane2.setPosition(plane2.getPosition().x + (plane2Speed * TIMP), plane2.getPosition().y);
+								if (plane2.getPosition().x > 1400)
+									plane2Active = false;
+							}
+							if (!ammoSpawned && ammoSinceDespawn > 5)
+							{
+								srand(time(0)*ammoSinceDespawn);
+								int x = rand() % 1200 + 100;
+								srand(time(0)*ammoSinceDespawn + 3.14);
+								int y = rand() % 500 + 10;
+								ammoSprite.setPosition(x, y);
+								if (!(healthSpawned == true && abs(x - healthSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
+								{
+									ammoSpawned = true;
+									ammoSinceSpawn = 0;
+								}
+							}
+							if (!healthSpawned && healthSinceDespawn > 6)
+							{
+								srand(time(0)*healthSinceDespawn);
+								int x = rand() % 1200 + 100;
+								srand(time(0)*healthSinceDespawn + 3.14);
+								int y = rand() % 500 + 10;
+								healthSprite.setPosition(x, y);
+								if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - speedSprite.getPosition().x) < 300 && speedSpawned == true))
+								{
+									healthSpawned = true;
+									healthSinceSpawn = 0;
+								}
+
+
+							}
+							if (!speedSpawned && speedSinceDespawn > 4)
+							{
+								srand(time(0)*speedSinceDespawn);
+								int x = rand() % 1200 + 100;
+								srand(time(0)*speedSinceDespawn + 3.14);
+								int y = rand() % 500 + 10;
+								speedSprite.setPosition(x, y);
+								if (!(ammoSpawned == true && abs(x - ammoSprite.getPosition().x) < 300 || abs(x - healthSprite.getPosition().x) < 300 && healthSpawned == true))
+								{
+									speedSpawned = true;
+									speedSinceSpawn = 0;
+								}
+							}
+							}
+							float tankSpeed = 0;
+
+							healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
+							if (mainTank.checkIfAlive())
+							{
+								//first we have to handle the player's input
+								if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
+								{
+									mainTank.movePlayer('u', nr, obstacol); //era 1.5 peste tot dar tancul se misca prea repede
+									tankSpeed = rand() % 1000;
+									tankSpeed /= 1000;
+									tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
+									srand(time(0));
+									tankSpeed += rand() % 5;
+								}
+								else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
+								{
+									mainTank.movePlayer('l', nr, obstacol);
+								}
+								else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
+								{
+									mainTank.movePlayer('r', nr, obstacol);
+								}
+								else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
+								{
+									mainTank.movePlayer('d', nr, obstacol);
+									tankSpeed = rand() % 1000;
+									tankSpeed /= 1000;
+									tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
+									srand(time(0));
+									tankSpeed += rand() % 5;
+								}
+
+								// Fire a bullet
+								if (Keyboard::isKeyPressed(Keyboard::Space))
+								{
+									if (bullets[currentBullet].isInFlight() != true)
+									{
+										float tankXX;
+										float tankYY;
+										mainTank.goodPoint(tankXX, tankYY);
+										double rotation = (double)mainTank.rotationOfPlayer();
+										bullets[currentBullet].thirdPoint(tankXX, tankYY, rotation, xOrigin, yOrigin, X, Y);
+
+										bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin, rotation);
+										currentBullet++;
+										if (currentBullet >= playerNumberBullets)
+										{
+											currentBullet = 0;
+										}
+									}
+
+								}
+								tankX = mainTank.getXorigin();
+								tankY = mainTank.getYorigin();
+							}
+
+							if (Keyboard::isKeyPressed(Keyboard::Escape))
+							{
+								opt = 1;
+							}
+
+
+							if (chaserLife > 0)
+							{
+								double chaserRotation = (double)chaser.rotationOfChaser();
+								if (!chaser.isInMotion())
+								{
+									double A, D;
+									if (chaserRotation > rotationNeeded && okayGo == 0)
+									{
+										A = chaserRotation - rotationNeeded;
+										D = 360 - A;
+									}
+									else if (chaserRotation < rotationNeeded && okayGo == 0)
+									{
+										D = rotationNeeded - chaserRotation;
+										A = 360 - D;
+									}
+									if (A > D && !okayGo)
+									{
+										okayGo = 1;
+									}
+									else if (A < D && !okayGo)
+									{
+										okayGo = 2;
+									}
+									if (okayGo == 1)
+									{
+										chaser.moveChaser('r', 0.15);
+										chaser.rotate();
+									}
+									else if (okayGo == 2)
+									{
+										chaser.moveChaser('l', 0.15);
+										chaser.rotate();
+									}
+								}
+								if (abs(chaserRotation - rotationNeeded) < 1.5 && !chaser.isInMotion())
+								{
+									chaser.doNotRotate();
+									okayGo = 0;
+									path = chaser.pathToPlayer(tankX, tankY);
+									changePath = path;
+								}
+								if (chaser.isInMotion() && path != 0)
+								{
+									chaser.moveChaser('d', 0.15);
+									path--;
+								}
+								if (path < 0)
+								{
+									chaser.rotate();
+									rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+								}
+								else if ((changePath - path > 0) && (changePath - path < 3))
+								{
+									chaser.moveChaser('l', 0.2);
+									chaser.rotate();
+									tankX = mainTank.getXorigin();
+									tankY = mainTank.getYorigin();
+									rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+								}
+								int x = rand() % 10;
+								if (x % 7 == 0)
+								{
+									chaser.moveChaser('r', 0.2);
+									chaser.rotate();
+									if (chaserBullets[chaserCurrentBullet].isInFlight() != true)
+									{
+										//the next section will calculate the direction in which the bullet is fired
+										float chaserXX = chaser.getXorigin();
+										float chaserYY = chaser.getYorigin();
+										chaser.goodPoint(chaserXX, chaserYY);
+										double rotation = (double)chaser.rotationOfChaser();
+										chaserBullets[chaserCurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
+										chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
+										chaserCurrentBullet++;
+										if (chaserCurrentBullet > 1)
+										{
+											chaserCurrentBullet = 0;
+										}
+									}
+								}
+							}
+
+							if (chaser2Life > 0)
+							{
+								double chaser2Rotation = (double)chaser2.rotationOfChaser();
+								cout << "rotation of chaser " << chaser2Rotation << endl;
+								if (!chaser2.isInMotion())
+								{
+									double A2, D2;
+									if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
+									{
+										A2 = chaser2Rotation - rotationNeeded2;
+										D2 = 360 - A2;
+									}
+									else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
+									{
+										D2 = rotationNeeded2 - chaser2Rotation;
+										A2 = 360 - D2;
+									}
+									if (A2 > D2 && !okayGo2)
+									{
+										okayGo2 = 1;
+									}
+									else if (A2 < D2 && !okayGo2)
+									{
+										okayGo2 = 2;
+									}
+									if (okayGo2 == 1)
+									{
+										chaser2.moveChaser('r', 1.5);
+										chaser2.rotate();
+									}
+									else if (okayGo2 == 2)
+									{
+										chaser2.moveChaser('l', 1.5);
+										chaser2.rotate();
+									}
+								}
+								if (abs(chaser2Rotation - rotationNeeded2) < 1.7 && !chaser2.isInMotion())
+								{
+									chaser2.doNotRotate();
+									cout << "stop, pauza ";
+									okayGo2 = 0;
+									path2 = chaser2.pathToPlayer(tankX, tankY);
+									cout << "path " << path;
+									changePath2 = path2;
+								}
+								if (chaser2.isInMotion() && path2 != 0)
+								{
+									chaser2.moveChaser('d', 0.15);
+									path2--;
+								}
+								if (path2 < 0)
+								{
+									chaser2.rotate();
+									rotationNeeded2 = chaser2.rotationNeeded(tankX, tankY);
+								}
+								else if ((changePath2 - path2 > 0) && (changePath2 - path2 < 3))
+								{
+									chaser2.moveChaser('l', 0.2);
+									chaser2.rotate();
+									tankX = mainTank.getXorigin();
+									tankY = mainTank.getYorigin();
+									rotationNeeded2 = chaser2.rotationNeeded(tankX, tankY);
+								}
+
+
+								int x = rand() % 11;
+								if (x % 10 == 0)
+								{
+									if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)
+									{
+										//the next section will calculate the direction in which the bullet is fired
+										float chaser2XX = chaser2.getXorigin();
+										float chaser2YY = chaser2.getYorigin();
+										chaser2.goodPoint(chaser2XX, chaser2YY);
+										double rotation = (double)chaser2.rotationOfChaser();
+										chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaser2XX, chaser2YY, chaser2Rotation, xOrigin, yOrigin, X, Y);
+										chaser2Bullets[chaser2CurrentBullet].shoot(chaser2XX, chaser2YY, xOrigin, yOrigin, chaser2Rotation);
+										chaser2CurrentBullet++;
+										if (chaser2CurrentBullet > 1)
+										{
+											chaser2CurrentBullet = 0;
+										}
+									}
+								}
+							}
+
+							// Actualizarea pt bullets in-flight
+							for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
+							{
+
+								if (bullets[i].isInFlight())
+								{
+									bullets[i].update(0.15);
+									if (chaser.checkIfIntersect(bullets[i].getShape()) && chaserLife > 0)
+									{
+										chaserLife--;
+										bullets[i].stop();
+									}
+									else if (chaser2.checkIfIntersect(bullets[i].getShape()) && chaser2Life > 0)
+									{
+										chaser2Life--;
+										bullets[i].stop();
+									}
+									if (bullets[i].intersect(obstacol, nr))
+									{
+										bullets[i].stop();
+									}
+								}
+							}
+
+							//CHASERs BULLETS UPDATE MOVEMENT -----------------------------------------------------------------------------
+							for (j = 0; j < 2 && chaserLife > 0; j++)
+							{
+								if (chaserBullets[j].isInFlight())
+								{
+									chaserBullets[j].update(0.15);
+									int oki = 1;
+
+									if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive() && oki)
+									{
+										mainTank.lessHealth();
+										chaserBullets[j].stop();
+									}
+									if (chaserBullets[j].intersect(obstacol, nr))
+									{
+										chaserBullets[j].stop();
+									}
+								}
+							}
+							for (k = 0; k < 1 && chaser2Life > 0; k++)
+							{
+								if (chaser2Bullets[k].isInFlight())
+								{
+									chaser2Bullets[k].update(0.15);
+									if (chaser2Bullets[k].intersect(obstacol, nr))
+									{
+										chaser2Bullets[k].stop();
+									}
+									if (mainTank.checkIfIntersect(chaser2Bullets[k].getShape()) && mainTank.checkIfAlive())
+									{
+										mainTank.lessHealth();
+										chaser2Bullets[k].stop();
+									}
+								}
+							}
+							mainScreen.clear();
+							mainScreen.draw(spriteBackground);
+							stringstream string1, string2, string3;
+							string1 << "Integrity: " << mainTank.getHealth();
+							healthLevel.setString(string1.str());
+							string2 << "Speed: " << tankSpeed << " KM/H";
+							SpeedTank.setString(string2.str());
+							for (int i = 0; i <= nr; i++)
+								mainScreen.draw(obstacol[i]);
+
+							mainScreen.draw(healthLevel);
+							mainScreen.draw(SpeedTank);
+							mainScreen.draw(healthBarEmpty);
+							mainScreen.draw(healthBar);
+							mainScreen.draw(HP);
+
+							if (mainTank.checkIfAlive())
+							{
+								mainTank.drawPlayer(mainScreen);
+							}
+							else
+							{
+								explosionAnimationTank += 1;
+								bool boomTank = explosion.animation(explosionAnimationTank);
+								explosion.drawExplosion(mainScreen, boomTank, tankX, tankY);
+								string3 << "GAME OVER";
+								gameStatus.setString(string3.str());
+								gameStatus.setPosition(400, 320);
+								mainScreen.draw(gameStatus);
+							}
+
+							for (int i = 0; i <= nr; i++)
+							{
+								if (ammoSpawned == true && ammoSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+								{
+									ammoSinceDespawn = 0;
+									ammoSpawned = false;
+								}
+								if (healthSpawned == true && healthSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+								{
+									healthSinceDespawn = 0;
+									healthSpawned = false;
+								}
+								if (speedSpawned == true && speedSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+								{
+									speedSinceDespawn = 0;
+									speedSpawned = false;
+								}
+							}
+							if (ammoSinceSpawn > 10 && ammoSpawned == true)
+							{
+								ammoSinceDespawn = 0;
+								ammoSpawned = false;
+							}
+							if (healthSinceSpawn > 11 && healthSpawned == true)
+							{
+								healthSinceDespawn = 0;
+								healthSpawned = false;
+							}
+							if (speedSinceSpawn > 13 && speedSpawned == true)
+							{
+								speedSinceDespawn = 0;
+								speedSpawned = false;
+							}
+							if (mainTank.checkIfIntersect(ammoSprite))
+							{
+								ammoSpawned = false;
+								ammoSinceDespawn = 0;
+							}
+							if (mainTank.checkIfIntersect(healthSprite) && healthSpawned)
+							{
+								mainTank.updateHealth();
+								healthSpawned = false;
+								healthSinceDespawn = 0;
+							}
+							if (mainTank.checkIfIntersect(speedSprite) && speedSpawned)
+							{
+								mainTank.updateSpeed();
+								speedSpawned = false;
+								speedSinceDespawn = 0;
+							}
+							if (ammoSpawned)
+								mainScreen.draw(ammoSprite);
+							if (healthSpawned)
+								mainScreen.draw(healthSprite);
+							if (speedSpawned)
+								mainScreen.draw(speedSprite);
+
+							for (i = 0; i < 2; ++i)
+							{
+								if (bullets[i].isInFlight())
+								{
+									mainScreen.draw(bullets[i].getShape());
+								}
+							}
+							//CHASER BULLETS DRAW ON MAIN SCREEN ------------------------
+							for (j = 0; j < 1; ++j)
+							{
+								if (chaserBullets[j].isInFlight())
+								{
+									mainScreen.draw(chaserBullets[j].getShape());
+								}
+							}
+							for (k = 0; k < 1; ++k)
+							{
+								if (chaser2Bullets[k].isInFlight())
+								{
+									mainScreen.draw(chaser2Bullets[k].getShape());
+								}
+							}
+
+							if (chaserLife > 0)
+							{
+								chaser.drawAI_Chaser(mainScreen, 1);
+							}
+							else
+							{
+								c1Dead = true;
+								explosionAnimation += 1;
+								chaserX = chaser.getXorigin();
+								chaserY = chaser.getYorigin();
+								bool boom = explosion.animation(explosionAnimation);
+								explosion.drawExplosion(mainScreen, boom, chaserX, chaserY);
+							}
+
+							if (chaser2Life > 0)
+							{
+								chaser2.drawAI_Chaser(mainScreen, 2);
+							}
+							else
+							{
+								c2Dead = true;
+								explosionAnimation2 += 1;
+								chaser2X = chaser2.getXorigin();
+								chaser2Y = chaser2.getYorigin();
+								bool boom2 = explosion2.animation(explosionAnimation);
+								explosion2.drawExplosion(mainScreen, boom2, chaser2X, chaser2Y);
+							}
+							if (c1Dead && c2Dead)
+							{
+								string3 << "YOU WON, CONGRATZ!";
+								gameStatus.setString(string3.str());
+								gameStatus.setPosition(200, 320);
+								mainScreen.draw(gameStatus);
+							}
+							mainScreen.draw(plane);
+							mainScreen.draw(plane2);
+							mainScreen.display();
+
+						}
 	}
 
 }
