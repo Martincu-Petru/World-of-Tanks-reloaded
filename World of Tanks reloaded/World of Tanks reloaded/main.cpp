@@ -313,6 +313,10 @@ int main()
 	SpeedTank.setCharacterSize(30);
 	SpeedTank.setFillColor(Color::White);
 
+	gameStatus.setFont(fontHealth);
+	gameStatus.setCharacterSize(100);
+	gameStatus.setFillColor(Color::White);
+
 	Clock timeGone;
 	int opt = 1;
 	int harta = 1;
