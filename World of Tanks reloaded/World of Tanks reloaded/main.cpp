@@ -34,25 +34,29 @@ void moveDown(int &itemCurent, Text optiunea[4], int nrOptiuni)
 }
 
 Font textStyle;
-Text optiunea[4], optiuneaExit[3], optiuneaResume[3], optiuneaDif[5];
+Text optiunea[4], optiuneaExit[3], optiuneaResume[3], optiuneaDif[4], optiuneaOpt[5];
 
-bool matrix[14][23];
-int harta = 1;
+bool matrix[14][23], matrix2[14][23], matrix3[14][23];
 
 void citire(int harta)
 {
 	ifstream fi;
-	if (harta == 1)
-		fi.open("mat.in");
-	else
-		if (harta == 2)
-			fi.open("mat2.in");
-		else
-			if (harta == 3)
-				fi.open("mat3.in");
+	fi.open("mat.in");
 	for (int i = 0; i < 14; i++)
 		for (int j = 0; j < 23; j++)
 			fi >> matrix[i][j];
+	fi.close();
+	fi.open("mat2.in");
+	for (int i = 0; i < 14; i++)
+		for (int j = 0; j < 23; j++)
+			fi >> matrix2[i][j];
+	fi.close();
+	fi.open("mat3.in");
+	for (int i = 0; i < 14; i++)
+		for (int j = 0; j < 23; j++)
+			fi >> matrix3[i][j];
+	fi.close();
+
 }
 
 void setOptionsDif()
@@ -62,47 +66,96 @@ void setOptionsDif()
 
 	optiuneaDif[0].setFont(textStyle);
 	optiuneaDif[0].setFillColor(Color::White);
-	optiuneaDif[0].setString("Difficulty");
-	optiuneaDif[0].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1 + 125));
+	optiuneaDif[0].setString("Chose map");
+	optiuneaDif[0].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1 + 70));
 
 	optiuneaDif[1].setFont(textStyle);
 	optiuneaDif[1].setFillColor(Color::Red);
-	optiuneaDif[1].setString("Easy");
-	optiuneaDif[1].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1.5 + 125));
+	optiuneaDif[1].setString("Malinovka");
+	optiuneaDif[1].setPosition(Vector2f(1366 / 4-100, 768/3*2));
 
 	optiuneaDif[2].setFont(textStyle);
 	optiuneaDif[2].setFillColor(Color::White);
-	optiuneaDif[2].setString("Medium");
-	optiuneaDif[2].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2 + 125));
+	optiuneaDif[2].setString("Siegefield");
+	optiuneaDif[2].setPosition(Vector2f(1366 / 4*2 - 100, 768 / 3 * 2));
 
 	optiuneaDif[3].setFont(textStyle);
 	optiuneaDif[3].setFillColor(Color::White);
-	optiuneaDif[3].setString("Hard");
-	optiuneaDif[3].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2.5 + 125));
+	optiuneaDif[3].setString("Stalingrad");
+	optiuneaDif[3].setPosition(Vector2f(1366 / 4*3 - 100, 768 / 3 * 2));
 
-	optiuneaDif[4].setFont(textStyle);
-	optiuneaDif[4].setFillColor(Color::White);
-	optiuneaDif[4].setString("Back to menu");
-	optiuneaDif[4].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 3 + 125));
 }
 
-void moveLeft(int &itemCurentExit, Text optiuneaExit[3])
+void setOptionsOpt()
 {
-	if (itemCurentExit == 2)
+	if (!textStyle.loadFromFile("Font.ttf"))
+		cout << "Error loading font!";
+
+	optiuneaOpt[0].setFont(textStyle);
+	optiuneaOpt[0].setFillColor(Color::White);
+	optiuneaOpt[0].setString("Difficulty");
+	optiuneaOpt[0].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1 + 125));
+
+	optiuneaOpt[1].setFont(textStyle);
+	optiuneaOpt[1].setFillColor(Color::Red);
+	optiuneaOpt[1].setString("Easy");
+	optiuneaOpt[1].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 1.5 + 125));
+
+	optiuneaOpt[2].setFont(textStyle);
+	optiuneaOpt[2].setFillColor(Color::White);
+	optiuneaOpt[2].setString("Medium");
+	optiuneaOpt[2].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2 + 125));
+
+	optiuneaOpt[3].setFont(textStyle);
+	optiuneaOpt[3].setFillColor(Color::White);
+	optiuneaOpt[3].setString("Hard");
+	optiuneaOpt[3].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2.5 + 125));
+
+	optiuneaOpt[4].setFont(textStyle);
+	optiuneaOpt[4].setFillColor(Color::White);
+	optiuneaOpt[4].setString("Back to menu");
+	optiuneaOpt[4].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 3 + 125));
+}
+
+void moveLeft(int &itemCurentExit, Text optiuneaExit[3], int type)
+{
+	if (type == 1) {
+		if (itemCurentExit == 2)
+		{
+			optiuneaExit[itemCurentExit].setFillColor(Color::White);
+			itemCurentExit--;
+			optiuneaExit[itemCurentExit].setFillColor(Color::Red);
+		}
+	}
+	else
 	{
-		optiuneaExit[itemCurentExit].setFillColor(Color::White);
-		itemCurentExit--;
-		optiuneaExit[itemCurentExit].setFillColor(Color::Red);
+		if (itemCurentExit > 1)
+		{
+			optiuneaDif[itemCurentExit].setFillColor(Color::White);
+			itemCurentExit--;
+			optiuneaDif[itemCurentExit].setFillColor(Color::Red);
+		}
 	}
 }
 
-void moveRight(int &itemCurentExit, Text optiuneaExit[3])
+void moveRight(int &itemCurentExit, Text optiuneaExit[3], int type)
 {
-	if (itemCurentExit == 1)
+	if (type == 1) {
+		if (itemCurentExit == 1)
+		{
+			optiuneaExit[itemCurentExit].setFillColor(Color::White);
+			itemCurentExit++;
+			optiuneaExit[itemCurentExit].setFillColor(Color::Red);
+		}
+	}
+	else
 	{
-		optiuneaExit[itemCurentExit].setFillColor(Color::White);
-		itemCurentExit++;
-		optiuneaExit[itemCurentExit].setFillColor(Color::Red);
+		if (itemCurentExit < 3)
+		{
+			optiuneaDif[itemCurentExit].setFillColor(Color::White);
+			itemCurentExit++;
+			optiuneaDif[itemCurentExit].setFillColor(Color::Red);
+		}
 	}
 }
 
@@ -179,9 +232,9 @@ int main()
 {
 	setOptions();
 	setOptionsExit();
+	setOptionsOpt();
 	resumeGame();
 	setOptionsDif();
-	citire(harta);
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
 	Player secondTank("T34.png");
@@ -225,35 +278,29 @@ int main()
 	Event Event;
 	Texture healthBarTexture, textureBackground,  planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
 	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground, resumeBackground;
-	
-	Texture CrateTexture;
-	if(harta==1)
-		CrateTexture.loadFromFile("crate.png");
-	else
-		if(harta==2)
-			CrateTexture.loadFromFile("crate_2.png");
-		else 
-			if(harta==3)
-				CrateTexture.loadFromFile("crate_3.png");
-	Sprite obstacol[100];
-	for (int i = 0; i < 100; i++)
-	{
-		obstacol[i].scale(Vector2f(0.3, 0.3));
-		obstacol[i].setTexture(CrateTexture);
-	}
-
-	int nr = -1;
-	for (int i = 0; i<14; i++)
-		for (int j = 0; j<23; j++)
-			if (matrix[i][j])
-				obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
-
 	RectangleShape healthBar, healthBarEmpty;
 	Text healthLevel, SpeedTank;
 	Font fontHealth;
 	bool planeActive = false, plane2Active = false, ammoSpawned = false, speedSpawned = false, healthSpawned = false;
 	float planeSpeed = 0.0f, plane2Speed = 0.0f, TIMP=0, ammoSinceDespawn=0, healthSinceDespawn=0, speedSinceDespawn=0, ammoSinceSpawn=0, healthSinceSpawn=0, speedSinceSpawn=0;
-	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0, itemCurentDif = 1;
+	int health = mainTank.getHealth(), itemCurent = 0, itemCurentExit = 2, itemCurentResume=0, itemCurentDif = 1, itemCurentOpt=1;
+	Sprite map1, map2, map3;
+	Texture map1t, map2t, map3t;
+	map1t.loadFromFile("map_no_1.png");
+	map2t.loadFromFile("map_no_2.png");
+	map3t.loadFromFile("map_no_3.png");
+	map1.setTexture(map1t);
+	map2.setTexture(map2t);
+	map3.setTexture(map3t);
+	
+	map1.setScale(0.2f, 0.2f);
+	map2.setScale(0.2f, 0.2f);
+	map3.setScale(0.2f, 0.2f);
+
+
+	map1.setPosition(1366 / 4 - 160, 768 / 3+50);
+	map2.setPosition(1366 / 4 * 2 - 160, 768 / 3 + 50);
+	map3.setPosition(1366 / 4 * 3 - 160, 768 / 3 + 50);
 
 
 	mainScreen.setKeyRepeatEnabled(true);
@@ -266,7 +313,6 @@ int main()
 	ammoTexture.loadFromFile("ammo.png");
 	healthBarTexture.loadFromFile("HP.png");
 	planeTexture.loadFromFile("Ao192.png");
-	textureBackground.loadFromFile("intro.jpg");
 	plane2Texture.loadFromFile("Bf110e.png");
 	fontHealth.loadFromFile("Font.ttf");
 
@@ -277,7 +323,6 @@ int main()
 	ammoSprite.setTexture(ammoTexture);
 	speedSprite.setTexture(speedTexture);
 	HP.setTexture(healthBarTexture);
-	spriteBackground.setTexture(textureBackground);
 	plane.setTexture(planeTexture);
 	plane2.setTexture(plane2Texture);
 
@@ -316,8 +361,35 @@ int main()
 	Clock timeGone;
 	int opt = 1;
 	int harta = 1;
+	textureBackground.loadFromFile("map_no_1_bg.jpg");
+	spriteBackground.setTexture(textureBackground);
+	citire(harta);
+
+	Texture CrateTexture;
+	if (harta == 1)
+		CrateTexture.loadFromFile("crate.png");
+	else
+		if (harta == 2)
+			CrateTexture.loadFromFile("crate_2.png");
+		else
+			if (harta == 3)
+				CrateTexture.loadFromFile("crate_3.png");
+	Sprite obstacol[100];
+
+	for (int i = 0; i < 100; i++)
+	{
+		obstacol[i].scale(Vector2f(0.3, 0.3));
+		obstacol[i].setTexture(CrateTexture);
+	}
+
+
+	int nr = -1;
+	for (int i = 0; i<14; i++)
+		for (int j = 0; j<23; j++)
+			if (matrix[i][j])
+				obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
 	while (mainScreen.isOpen()) {
-		//mainScreen.setMouseCursorVisible(false);
+		mainScreen.setMouseCursorVisible(false);
 		if (opt == 1) {
 
 			sf::Event menuEvent;
@@ -340,6 +412,9 @@ int main()
 						case 0:
 							opt = 2;
 							break;
+						case 1:
+							opt = 21;
+							break;
 						case 3:
 							opt = 4;
 							break;
@@ -359,6 +434,119 @@ int main()
 				mainScreen.draw(optiunea[i]);
 			mainScreen.display();
 		}
+		else
+			if (opt == 21)
+		{
+				sf::Event menuEvent;
+				while (mainScreen.pollEvent(menuEvent))
+				{
+					switch (menuEvent.type)
+					{
+					case Event::KeyPressed:
+						switch (menuEvent.key.code)
+						{
+						case::Keyboard::Left:
+							if(itemCurentDif>1)
+								moveLeft(itemCurentDif, optiuneaDif, 2);
+							break;
+						case::Keyboard::Right:
+							if(itemCurentDif<3)
+								moveRight(itemCurentDif, optiuneaDif, 2);
+							break;
+						case::Keyboard::Return:
+							switch (itemCurentDif)
+							{
+							case 1:
+								harta=1;
+								textureBackground.loadFromFile("map_no_1_bg.jpg");
+								spriteBackground.setTexture(textureBackground);
+								if (harta == 1)
+									CrateTexture.loadFromFile("crate.png");
+								else
+									if (harta == 2)
+										CrateTexture.loadFromFile("crate_2.png");
+									else
+										if (harta == 3)
+											CrateTexture.loadFromFile("crate_3.png");
+								nr = -1;
+								for (int i = 0; i<14; i++)
+									for (int j = 0; j<23; j++)
+										if (matrix[i][j])
+											obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
+								for (int i = 0; i < 100; i++)
+								{
+									obstacol[i].setTexture(CrateTexture);
+								}
+
+								opt = 1;
+								break;
+							case 2:
+								harta=2;
+								textureBackground.loadFromFile("map_no_2_bg.png");
+								spriteBackground.setTexture(textureBackground);
+								if (harta == 1)
+									CrateTexture.loadFromFile("crate.png");
+								else
+									if (harta == 2)
+										CrateTexture.loadFromFile("crate_2.png");
+									else
+										if (harta == 3)
+											CrateTexture.loadFromFile("crate_3.png");
+								nr = -1;
+								for (int i = 0; i<14; i++)
+									for (int j = 0; j<23; j++)
+										if (matrix2[i][j])
+											obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
+								for (int i = 0; i < 100; i++)
+								{
+									obstacol[i].setTexture(CrateTexture);
+								}
+
+								opt = 1;
+								break;
+							case 3:
+								harta=3;
+								textureBackground.loadFromFile("map_no_3_bg.png");
+								spriteBackground.setTexture(textureBackground);
+								if (harta == 1)
+									CrateTexture.loadFromFile("crate.png");
+								else
+									if (harta == 2)
+										CrateTexture.loadFromFile("crate_2.png");
+									else
+										if (harta == 3)
+											CrateTexture.loadFromFile("crate_3.png");
+								nr = -1;
+								for (int i = 0; i<14; i++)
+									for (int j = 0; j<23; j++)
+										if (matrix3[i][j])
+											obstacol[++nr].setPosition(Vector2f(j * 60, i * 60));
+								for (int i = 0; i < 100; i++)
+								{
+									obstacol[i].setTexture(CrateTexture);
+								}
+
+								opt = 1;
+								break;
+							}
+							break;
+						}
+						break;
+					case sf::Event::Closed:
+						mainScreen.close();
+						break;
+					}
+				}
+
+				mainScreen.clear();
+				mainScreen.draw(menuExitBackground);
+				mainScreen.draw(map1);
+				mainScreen.draw(map2);
+				mainScreen.draw(map3);
+				for (int i = 0; i < 4; i++)
+					mainScreen.draw(optiuneaDif[i]);
+				mainScreen.display();
+		}
 		else if (opt == 7)
 		{
 			sf::Event menuEvent;
@@ -370,14 +558,14 @@ int main()
 					switch (menuEvent.key.code)
 					{
 					case::Keyboard::Up:
-						if (itemCurentDif>1)
-							moveUp(itemCurentDif, optiuneaDif, 5);
+						if (itemCurentOpt>1)
+							moveUp(itemCurentOpt, optiuneaOpt, 5);
 						break;
 					case::Keyboard::Down:
-						moveDown(itemCurentDif, optiuneaDif, 5);
+						moveDown(itemCurentOpt, optiuneaOpt, 5);
 						break;
 					case::Keyboard::Return:
-						switch (itemCurentDif)
+						switch (itemCurentOpt)
 						{
 							break;
 						case 1:
@@ -405,7 +593,7 @@ int main()
 			mainScreen.clear();
 			mainScreen.draw(resumeBackground);
 			for (int i = 0; i < 5; i++)
-				mainScreen.draw(optiuneaDif[i]);
+				mainScreen.draw(optiuneaOpt[i]);
 			mainScreen.display();
 		}
 		else
@@ -922,6 +1110,7 @@ int main()
 					}
 				}
 				mainScreen.clear();
+
 				mainScreen.draw(spriteBackground);
 				stringstream string1, string2, string3;
 				string1 << "Integrity: " << mainTank.getHealth();
@@ -931,7 +1120,6 @@ int main()
 				mainTank.drawPlayer(mainScreen);
 				for (int i = 0; i <= nr; i++)
 					mainScreen.draw(obstacol[i]);
-
 				mainScreen.draw(healthLevel);
 				mainScreen.draw(SpeedTank);
 				mainScreen.draw(healthBarEmpty);
@@ -1083,10 +1271,10 @@ int main()
 							switch (menuEvent.key.code)
 							{
 							case::Keyboard::Left:
-								moveLeft(itemCurentExit, optiuneaExit);
+								moveLeft(itemCurentExit, optiuneaExit, 1);
 								break;
 							case::Keyboard::Right:
-								moveRight(itemCurentExit, optiuneaExit);
+								moveRight(itemCurentExit, optiuneaExit, 1);
 								break;
 							case::Keyboard::Return:
 								switch (itemCurentExit)
