@@ -24,7 +24,7 @@ public:
 	{
 		// The constructor
 	}
-	AI_Chaser(string imageName)
+	AI_Chaser(string imageName, int ok)
 	{
 		//currentHealth = 100;
 		//maxHealth = 100;
@@ -32,12 +32,28 @@ public:
 			cerr << "Error" << endl;
 		AI_ChaserTexture.setSmooth(true);
 		AI_ChaserSprite.setTexture(AI_ChaserTexture);
-		AI_ChaserSprite.move(Vector2f(1000, 80));
+		if (ok == 1)
+		{
+			AI_ChaserSprite.move(Vector2f(1000, 257.164));
+			AI_ChaserSprite.setRotation(180);
+		}
+		else if (ok == 2)
+		{
+			AI_ChaserSprite.move(Vector2f(1000, 800));
+			AI_ChaserSprite.setRotation(270);
+		}
 	}
-	void drawAI_Chaser(RenderWindow &screen)
+	void drawAI_Chaser(RenderWindow &screen, int ok)
 	{
 		AI_ChaserSprite.setOrigin(AI_ChaserSprite.getTexture()->getSize().x*0.5, AI_ChaserSprite.getTexture()->getSize().y*0.5);
-		AI_ChaserSprite.setScale(0.25f, 0.25f);
+		if (ok == 1)
+		{
+			AI_ChaserSprite.setScale(0.25f, 0.25f);
+		}
+		else if (ok == 2)
+		{
+			AI_ChaserSprite.setScale(0.15f, 0.15f);
+		}
 		screen.draw(AI_ChaserSprite);
 	}
 	bool InSight(Player tank)
@@ -87,7 +103,6 @@ public:
 			else
 				if (direction == 'l')
 				{
-					//cout << endl << " NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU " << endl;
 					AI_ChaserSprite.rotate(moveSpeed - 0.25);
 				}
 				else
@@ -113,16 +128,6 @@ public:
 
 		}
 	}
-	void nextPointCoordinates(double L, double &xNextPoint, double &yNextPoint)
-	{
-		float x, y;
-		x = AI_ChaserSprite.getPosition().x;
-		y = AI_ChaserSprite.getPosition().y;
-
-		xNextPoint = x - L;
-		yNextPoint = y;
-
-	}
 	bool isInMotion()
 	{
 		return inMotion;
@@ -135,119 +140,70 @@ public:
 	{
 		inMotion = false;
 	}
-	double cosForRotation(float xA, float yA, float r)
+	void goodPoint(float &x, float &y)
 	{
-		float xC = AI_ChaserSprite.getPosition().x;
-		float yC = AI_ChaserSprite.getPosition().y;
+		int r = AI_ChaserSprite.getGlobalBounds().height / 2;
+		float xA = AI_ChaserSprite.getPosition().x;
+		float yA = AI_ChaserSprite.getPosition().y;
+		double rotation = AI_ChaserSprite.getRotation();
 
-		if ((xC < xA && yC >= yA) || (xC >= xA && yC > yA))
+		float cosT = cos(rotation * 3.14159265 / 180.0);
+		float c = r * abs(cosT);
+		if (0 <= rotation && rotation <= 90 || 270 <= rotation && rotation < 360)
 		{
-			return ((yC - yA) / (r * 2));
+			y = yA - c;
 		}
 		else
 		{
-			return ((yA - yC) / (r * 2));
+			y = yA + c;
+		}
+		x = sqrt(r * r - (yA - y) * (yA - y)) + xA;
+		if (rotation > 180)
+		{
+			x = xA - sqrt(r * r - (yA - y) * (yA - y));
+		}
+		else if (rotation == 90)
+		{
+			x = xA + r;
+			y = yA;
+		}
+		else if (rotation == 270)
+		{
+			y = yA;
+			x = xA + r;
 		}
 	}
-	float rotationNeeded(float xA, float yA, double cosepsilum)
+	double rotationNeeded(float xA, float yA)
 	{
-		//this function calculates the rotation needed for the AI to be directed towards the player
 		float xC = AI_ChaserSprite.getPosition().x;
 		float yC = AI_ChaserSprite.getPosition().y;
-		
-		
-		if (xC < xA && yC > yA)
+		double cosa = abs(yA - yC) / sqrt(pow(xC - xA, 2) + pow(yC - yA, 2));
+		double a = acos(cosa);
+		a = a * 180.0 / M_PI;
+		if (xC < xA && yC < yA)
 		{
-			if (cosepsilum < -1)
-			{
-				while (cosepsilum < -1)
-				{
-					cosepsilum = cosepsilum + 2 * M_PI;
-				}
-			}
-			else if (cosepsilum > 1)
-			{
-				while (cosepsilum > 1)
-				{
-					cosepsilum = cosepsilum - 2 * M_PI;
-				}
-			}
-
-			//return acos(cosepsilum)/180.0 * M_PI;
-		}
-		else if (xC < xA && yC == yA)
-		{
-			return 90;
-		}
-		else if (xC < xA && yC < yA)
-		{
-			cosepsilum = -cosepsilum - 1;
-			if (cosepsilum < -1)
-			{
-				while (cosepsilum < -1)
-				{
-					cosepsilum = cosepsilum + 2 * M_PI;
-				}
-			}
-			else if (cosepsilum > 1)
-			{
-				while (cosepsilum > 1)
-				{
-					cosepsilum = cosepsilum - 2 * M_PI;
-				}
-			}
-
-			//return acos((180 - cosepsilum) * M_PI / 180.0) / 180.0 * M_PI;
-		}
-		else if (xC == xA && yC < yA)
-		{
-			return 180;
+			a = 180 - a;
 		}
 		else if (xC > xA && yC < yA)
 		{
-			cosepsilum = cosepsilum - 1;
-			if (cosepsilum < -1)
-			{
-				while (cosepsilum < -1)
-				{
-					cosepsilum = cosepsilum + 2 * M_PI;
-				}
-			}
-			else if (cosepsilum > 1)
-			{
-				while (cosepsilum > 1)
-				{
-					cosepsilum = cosepsilum - 2 * M_PI;
-				}
-			}
-			//return acos((180 + cosepsilum) * M_PI / 180.0) / 180.0 * M_PI;
-		}
-		else if (xC > xA && yC == yA)
-		{
-			return 270;
+			a = 180 + a;
 		}
 		else if (xC > xA && yC > yA)
 		{
-			if (cosepsilum < -1)
-			{
-				while (cosepsilum < -1)
-				{
-					cosepsilum = cosepsilum + 2 * M_PI;
-				}
-			}
-			else if (cosepsilum > 1)
-			{
-				while (cosepsilum > 1)
-				{
-					cosepsilum = cosepsilum - 2 * M_PI;
-				}
-			}
-			//return 270 + cosepsilum;
+			a = 360 - a;
 		}
-		else
-		{
-			return 0;
-		}
-		return acos(cosepsilum) / 180.0 * M_PI;
+		return a;
+	}
+	float pathToPlayer(float xA, float yA)
+	{
+		float xC = AI_ChaserSprite.getPosition().x;
+		float yC = AI_ChaserSprite.getPosition().y;
+
+		return sqrt(abs(xC - xA) + abs(yC - yA));
+	}
+	bool checkIfIntersect(Sprite entity)
+	{
+		return (AI_ChaserSprite.getGlobalBounds().intersects(entity.getGlobalBounds()));
+		//return (AI_ChaserSprite.getGlobalBounds().intersects())
 	}
 };

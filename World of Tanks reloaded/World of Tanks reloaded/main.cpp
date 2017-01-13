@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "menu.h"
 #include <fstream>
+#include "Animation.h"
 using namespace sf;
 using namespace std;
 
@@ -165,6 +166,7 @@ void resumeGame()
 	optiuneaResume[2].setPosition(Vector2f(1366 / 3 + 100, 768 / 5 * 2 + 200));
 }
 
+
 int main()
 {
 	setOptions();
@@ -174,12 +176,42 @@ int main()
 	citire();
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
+	Player secondTank("T34.png");
 
-	ai_Entity mainAI("Ferdinand.png");
-	AI_Chaser chaser("E-1002.png");
-	float rotationNeeded = 270;
-	// 2 bullets should do
-	Bullet bullets[2];
+	//ai_Entity mainAI("Ferdinand.png");
+	AI_Chaser chaser("E-1002.png", 1);
+	AI_Chaser chaser2("T-59.png", 2);
+	//---------------------------------------------------------------------------------------------------------------
+	float tankX = mainTank.getXorigin();
+	float tankY = mainTank.getYorigin();
+	float rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+	float path, changePath;
+	int ok = 1, okayGo = 0;
+	Bullet chaserBullets[3];
+	int chaserCurrentBullet = 0, j;
+	int chaserLife = 3;
+	srand(time(NULL));
+	//---------------------------------------------------------------------------------------------------------------
+	//this does not change
+	int playerNumberBullets = 1;
+	double xOrigin;
+	double yOrigin;
+	float chaserX;
+	float chaserY;
+	unsigned int X = mainTank.xMaxim();
+	unsigned int Y = mainTank.yMaxim();
+	//----------------------------------------------------FOR THE SECOND CHASER HEEEEEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE-----------------------------------
+	float chaser2X, chaser2Y, chaser2Rotation = chaser2.rotationOfChaser(), rotationNeeded2 = chaser2.rotationNeeded(tankX, tankY);
+	int variabila, okayGo2 = 0;
+	Bullet chaser2Bullets[3];
+	int chaser2CurrentBullet = 0, k;
+	int chaser2Life = 5;
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+	bool c1Dead = false, c2Dead = false;
+	unsigned int explosionAnimation = 0, explosionAnimation2 = 0, explosionAnimationTank = 0;
+	explosion explosion;
+	Text gameStatus;
+	Bullet bullets[10];
 	int currentBullet = 0, i;
 
 	Event Event;
@@ -270,7 +302,7 @@ int main()
 	Clock timeGone;
 	int opt = 1;
 	while (mainScreen.isOpen()) {
-
+		mainScreen.setMouseCursorVisible(false);
 		if (opt == 1) {
 
 			sf::Event menuEvent;
@@ -556,76 +588,357 @@ int main()
 					srand(time(0));
 					tankSpeed += rand() % 5;
 				}
-
-				// Fire a bullet
-				if (Keyboard::isKeyPressed(Keyboard::Space))
+				if (mainTank.checkIfAlive())
 				{
-					if (bullets[currentBullet].isInFlight() != true)
+					//first we have to handle the player's input
+					if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
 					{
-
-						//the next section will calculate the direction in which the bullet is fired
-						double xOrigin;
-						double yOrigin;
-						double rotation = (double)mainTank.rotationOfPlayer();
-						unsigned int X = mainTank.xMaxim();
-						unsigned int Y = mainTank.yMaxim();
-						float tankX = mainTank.getXorigin();
-						float tankY = mainTank.getYorigin();
-						bullets[currentBullet].thirdPoint(tankX, tankY, rotation, xOrigin, yOrigin, X, Y);
-
-						bullets[currentBullet].shoot(tankX, tankY, xOrigin, yOrigin);
-						currentBullet++;
-						if (currentBullet > 1)
-						{
-							currentBullet = 0;
-						}
+						//	cout << endl << " DA " << endl;
+						mainTank.movePlayer('u'); //era 1.5 peste tot dar tancul se misca prea repede
+						tankSpeed = rand() % 1000;
+						tankSpeed /= 1000;
+						tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
+						srand(time(0));
+						tankSpeed += rand() % 5;
+					}
+					else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
+					{
+						mainTank.movePlayer('l');
+					}
+					else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
+					{
+						mainTank.movePlayer('r');
+					}
+					else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
+					{
+						mainTank.movePlayer('d');
+						tankSpeed = rand() % 1000;
+						tankSpeed /= 1000;
+						tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
+						srand(time(0));
+						tankSpeed += rand() % 5;
 					}
 
+					// Fire a bullet
+					if (Keyboard::isKeyPressed(Keyboard::Space))
+					{
+						if (bullets[currentBullet].isInFlight() != true)
+						{
+							float tankXX;
+							float tankYY;
+							mainTank.goodPoint(tankXX, tankYY);
+							double rotation = (double)mainTank.rotationOfPlayer();
+							bullets[currentBullet].thirdPoint(tankXX, tankYY, rotation, xOrigin, yOrigin, X, Y);
+
+							bullets[currentBullet].shoot(tankXX, tankYY, xOrigin, yOrigin, rotation);
+							currentBullet++;
+							if (currentBullet >= playerNumberBullets)
+							{
+								currentBullet = 0;
+							}
+						}
+
+					}
+					tankX = mainTank.getXorigin();
+					tankY = mainTank.getYorigin();
 				}
 
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
 					opt = 1;
 				}
-				//from here
-				float xA = mainTank.getXorigin();
-				float yA = mainTank.getYorigin();
-				float chaserRotation = chaser.rotationOfChaser();
-				float radius = chaser.circleR(xA, yA);
-				double L = chaser.squareL(radius);
-				double xNextPoint, xChaser = chaser.getXorigin();
-				double yNextpoint, yChaser = chaser.getYorigin();
-				chaser.nextPointCoordinates(L, xNextPoint, yNextpoint);
-				if (chaserRotation < rotationNeeded && !chaser.isInMotion())
+				double chaserRotation = (double)chaser.rotationOfChaser();
+				//cout << "chaser rotation : " << chaserRotation << endl;
+				//cout << "rotation needed : " << rotationNeeded << endl << endl;
+				if (chaserLife > 0)
 				{
-					chaser.moveChaser('l', 1.5);
+					if (!chaser.isInMotion())
+					{
+						double A, D;
+						if (chaserRotation > rotationNeeded && okayGo == 0)
+						{
+							A = chaserRotation - rotationNeeded;
+							D = 360 - A;
+						}
+						else if (chaserRotation < rotationNeeded && okayGo == 0)
+						{
+							D = rotationNeeded - chaserRotation;
+							A = 360 - D;
+						}
+						//cout << " A " << A << "  D " << D << endl;
+						if (A > D && !okayGo)
+						{
+							okayGo = 1;
+						}
+						else if (A < D && !okayGo)
+						{
+							okayGo = 2;
+						}
+						if (okayGo == 1)
+						{
+							chaser.moveChaser('r', 0.15);
+							chaser.rotate();
+						}
+						else if (okayGo == 2)
+						{
+							chaser.moveChaser('l', 0.15);
+							chaser.rotate();
+						}
+					}
+					if (abs(chaserRotation - rotationNeeded) < 1.5 && !chaser.isInMotion())
+					{
+						//cout << "STOP ROTATING, YOU'RE ANNOYING ME! " << endl;
+						chaser.doNotRotate();
+						okayGo = 0;
+						/*cout << "coordinates of the tank, which didn't move AT ALL: " << tankX << "  " << tankY << endl;
+						cout << "coordinates of the CHASER, which should be where I put it " << chaser.getXorigin() << "  " << chaser.getYorigin() << endl;
+						cout << "chaser Rotation when it should stop " << chaserRotation << endl;
+						cout << "the rotation needed when it shoult stop " << rotationNeeded << endl;
+						cout << "the calculated path ";*/
+						path = chaser.pathToPlayer(tankX, tankY);
+						changePath = path;
+						//cout << path << "   and then   ";
+						//cout << path << endl;
+					}
+					if (chaser.isInMotion() && path != 0)
+					{
+						chaser.moveChaser('d', 0.15);
+						path--;
+						//cout << "the decreasing path : " << path << endl;
+					}
+					if (path < 0)
+					{
+						chaser.rotate();
+						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+					}
+					else if ((changePath - path  > 0) && (changePath - path < 3)) // - changePath / 4
+					{
+						chaser.moveChaser('l', 0.2);
+						//cout << "change rotation now " << endl;
+						chaser.rotate();
+						tankX = mainTank.getXorigin();
+						tankY = mainTank.getYorigin();
+						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+						//cout << "rotation needed " << rotationNeeded << endl << "chaser rotaation " << chaser.rotationOfChaser() << endl;
+					}
+					//chaser fires (or not)
+					int x = rand() % 10;
+					if (x % 7 == 0 && 0)
+					{
+						chaser.moveChaser('r', 0.2);
+						chaser.rotate();
+						//x = rand() % 100;
+						if (chaserBullets[chaserCurrentBullet].isInFlight() != true)// && x % 7 == 0)
+						{
+							//the next section will calculate the direction in which the bullet is fired
+							float chaserXX = chaser.getXorigin();
+							float chaserYY = chaser.getYorigin();
+							chaser.goodPoint(chaserXX, chaserYY);
+							double rotation = (double)chaser.rotationOfChaser();
+							chaserBullets[chaserCurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
+							chaserBullets[chaserCurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
+							chaserCurrentBullet++;
+							if (chaserCurrentBullet > 1)
+							{
+								chaserCurrentBullet = 0;
+							}
+						}
+					}
+					//chaserX = chaser.getXorigin();
+					//chaserY = chaser.getYorigin();
+					//cout << "chaserX " << chaserX << " chaserY  " << chaserY << endl;
 				}
-				else if (chaserRotation == rotationNeeded && xNextPoint < xChaser && yNextpoint >= yChaser)
+				//-----------------------------chaser 2 try --------------------------------chaser 2 try--------------------------------chaser 2 try-----------
+				if (chaser2Life > 0)
 				{
+					//cout << "STOP ROTATING, YOU'RE ANNOYING ME! " << endl;
 					chaser.doNotRotate();
-					chaser.moveChaser('d', 1.5);
+					okayGo = 0;
+					/*cout << "coordinates of the tank, which didn't move AT ALL: " << tankX << "  " << tankY << endl;
+					cout << "coordinates of the CHASER, which should be where I put it " << chaser.getXorigin() << "  " << chaser.getYorigin() << endl;
+					cout << "chaser Rotation when it should stop " << chaserRotation << endl;
+					cout << "the rotation needed when it shoult stop " << rotationNeeded << endl;
+					cout << "the calculated path ";*/
+					path = chaser.pathToPlayer(tankX, tankY);
+					changePath = path;
+					//cout << path << "   and then   ";
+					//cout << path << endl;
+				}
+				if (chaser.isInMotion() && path != 0)
+				{
+					chaser.moveChaser('d', 0.2);
+					path--;
+					//cout << "the decreasing path : " << path << endl;
+				}
+				if (path < 0)
+				{
+					chaser.rotate();
+					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+				}
+				if ((changePath - path - changePath / 4 > 0) && (changePath - path - changePath / 4 < 3))
+				{
+					chaser.rotate();
+					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
+				}
+
+				/*if (chaser2Rotation < rotationNeeded2 && !chaser.isInMotion() )
+				{
+				chaser2.moveChaser('l', 0.6);
+				}*/
+				if (!chaser2.isInMotion())
+				{
+					double A2, D2;
+					if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
+					{
+						A2 = chaser2Rotation - rotationNeeded2;
+						D2 = 360 - A2;
+					}
+					else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
+					{
+						D2 = rotationNeeded2 - chaser2Rotation;
+						A2 = 360 - D2;
+					}
+					//cout << " A2 " << A2 << "  D2 " << D2 << endl;
+					if (A2 > D2 && !okayGo2)
+					{
+						okayGo2 = 1;
+					}
+					else if (A2 < D2 && !okayGo2)
+					{
+						okayGo2 = 2;
+					}
+					if (okayGo == 1)
+					{
+						chaser2.moveChaser('r', 1.5);
+						chaser2.rotate();
+					}
+					else if (okayGo2 == 2)
+					{
+						chaser2.moveChaser('l', 1.5);
+						chaser2.rotate();
+					}
+				}
+				//------------------------------------------------DE AICI INCEPE RANDOM MOVEMENT------------------------------------------------------------------------
+				if (abs(chaser2Rotation - rotationNeeded2) < 1 && !chaser2.isInMotion())
+				{
+					if (chaser2Rotation < 100 && chaser2Rotation > 230 || (chaser2Rotation > 250 || chaser2Rotation < 20))
+					{
+						variabila = rand() % 1000;
+						while (variabila < 200)
+						{
+							variabila = rand() % 1000;
+						}
+					}
+					else
+					{
+						variabila = rand() % 400;
+						while (variabila < 200)
+						{
+							variabila = rand() % 500;
+						}
+					}
+					//cout << "variabila : " << variabila << endl;
+					chaser2.doNotRotate();
+				}
+				if (variabila != 0 && chaser2.isInMotion() && variabila % 2 == 0)
+				{
+					chaser2.moveChaser('u', 1.5);
+					variabila -= 2;
+				}
+				else if (variabila % 2 == 1)
+				{
+					chaser2.moveChaser('d', 1.5);
+					if (variabila == 1)
+					{
+						variabila = 0;
+					}
+					else
+					{
+						variabila -= 2;
+					}
+				}
+				if (variabila < 10)
+				{
+					//cout << "Se intampla si minuni. -----------------------" << endl;
+					chaser2.rotate();
+					okayGo2 = 0;
+					rotationNeeded2 = rand() % 360;
+					if (chaser2Rotation > rotationNeeded2)
+					{
+						okayGo2 = 2;
+					}
 				}
 
 
-				float rot = mainTank.rotationOfPlayer();
-				//cout << " coordonate xA yA " << xA << " " << yA << endl;
-				//cout << "raza cercului : " << radius << endl;
-				//cout << "lungimea laturii patratului : " << L << endl;
-				//cout << "rotatie : " << chaserRotation << " " << rot << endl << endl;
-				//to here for chaser
-
+				int x = rand() % 11;
+				if (x % 10 == 0 && 0)
+				{
+					//x = rand() % 100;
+					if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)// && x % 7 == 0)
+					{
+						//the next section will calculate the direction in which the bullet is fired
+						float chaserXX = chaser2.getXorigin();
+						float chaserYY = chaser2.getYorigin();
+						chaser2.goodPoint(chaserXX, chaserYY);
+						double rotation = (double)chaser2.rotationOfChaser();
+						chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
+						chaser2Bullets[chaser2CurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
+						chaser2CurrentBullet++;
+						if (chaser2CurrentBullet > 1)
+						{
+							chaser2CurrentBullet = 0;
+						}
+					}
+				}
+				}
 
 				// Actualizarea pt bullets in-flight
-				for (i = 0; i < 2; i++)
+				for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
 				{
 					if (bullets[i].isInFlight())
 					{
-						bullets[i].update(0.250);
+						bullets[i].update(0.15);
+						if (chaser.checkIfIntersect(bullets[i].getShape()) && chaserLife > 0)
+						{
+							chaserLife--;
+							bullets[i].stop();
+						}
+						else if (chaser2.checkIfIntersect(bullets[i].getShape()) && chaser2Life > 0)
+						{
+							chaser2Life--;
+							bullets[i].stop();
+						}
+					}
+				}
+
+				//CHASERs BULLETS UPDATE MOVEMENT -----------------------------------------------------------------------------
+				for (j = 0; j < 2 && chaserLife > 0; j++)
+				{
+					if (chaserBullets[j].isInFlight())
+					{
+						chaserBullets[j].update(0.15);
+						if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive())
+						{
+							mainTank.lessHealth();
+							chaserBullets[j].stop();
+						}
+					}
+				}
+				for (k = 0; k < 1 && chaserLife > 0; k++)
+				{
+					if (chaser2Bullets[k].isInFlight())
+					{
+						chaser2Bullets[k].update(0.15);
+						if (mainTank.checkIfIntersect(chaser2Bullets[k].getShape()) && mainTank.checkIfAlive())
+						{
+							mainTank.lessHealth();
+							chaser2Bullets[k].stop();
+						}
 					}
 				}
 				mainScreen.clear();
 				mainScreen.draw(spriteBackground);
-				stringstream string1, string2;
+				stringstream string1, string2, string3;
 				string1 << "Integrity: " << mainTank.getHealth();
 				healthLevel.setString(string1.str());
 				string2 << "Speed: " << tankSpeed << " KM/H";
@@ -633,13 +946,28 @@ int main()
 				mainTank.drawPlayer(mainScreen);
 				for (int i = 0; i <= nr; i++)
 					mainScreen.draw(obstacol[i]);
-				mainScreen.draw(plane);
-				mainScreen.draw(plane2);
+
 				mainScreen.draw(healthLevel);
 				mainScreen.draw(SpeedTank);
 				mainScreen.draw(healthBarEmpty);
 				mainScreen.draw(healthBar);
 				mainScreen.draw(HP);
+
+				if (mainTank.checkIfAlive())
+				{
+					mainTank.drawPlayer(mainScreen);
+				}
+				else
+				{
+					explosionAnimationTank += 1;
+					bool boomTank = explosion.animation(explosionAnimationTank);
+					explosion.drawExplosion(mainScreen, boomTank, tankX, tankY);
+					string3 << "GAME OVER";
+					gameStatus.setString(string3.str());
+					gameStatus.setPosition(400, 320);
+					mainScreen.draw(gameStatus);
+				}
+
 				for (int i = 0; i <= nr; i++)
 				{
 					if (ammoSpawned == true && ammoSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
@@ -704,12 +1032,62 @@ int main()
 						mainScreen.draw(bullets[i].getShape());
 					}
 				}
-				mainAI.draw_ai_Entity(mainScreen);
-				chaser.drawAI_Chaser(mainScreen);
+				//CHASER BULLETS DRAW ON MAIN SCREEN ------------------------
+				for (j = 0; j < 1; ++j)
+				{
+					if (chaserBullets[j].isInFlight())
+					{
+						mainScreen.draw(chaserBullets[j].getShape());
+					}
+				}
+				for (k = 0; k < 1; ++k)
+				{
+					if (chaser2Bullets[k].isInFlight())
+					{
+						mainScreen.draw(chaser2Bullets[k].getShape());
+					}
+				}
+
+				//mainAI.draw_ai_Entity(mainScreen); we don't have this entity yet
+				if (chaserLife > 0)
+				{
+					chaser.drawAI_Chaser(mainScreen, 1);
+				}
+				else
+				{
+					c1Dead = true;
+					explosionAnimation += 1;
+					chaserX = chaser.getXorigin();
+					chaserY = chaser.getYorigin();
+					bool boom = explosion.animation(explosionAnimation);
+					explosion.drawExplosion(mainScreen, boom, chaserX, chaserY);
+				}
+
+				if (chaser2Life > 0)
+				{
+					chaser2.drawAI_Chaser(mainScreen, 2);
+				}
+				else
+				{
+					c2Dead = true;
+					explosionAnimation2 += 1;
+					chaser2X = chaser2.getXorigin();
+					chaser2Y = chaser2.getYorigin();
+					bool boom2 = explosion.animation(explosionAnimation);
+					explosion.drawExplosion(mainScreen, boom2, chaser2X, chaser2Y);
+				}
+				if (c1Dead && c2Dead)
+				{
+					string3 << "YOU WON, CONGRATZ!";
+					gameStatus.setString(string3.str());
+					gameStatus.setPosition(200, 320);
+					mainScreen.draw(gameStatus);
+				}
+				mainScreen.draw(plane);
+				mainScreen.draw(plane2);
 				mainScreen.display();
 			}
-			else
-				if (opt == 4)
+			else if (opt == 4)
 				{
 					sf::Event menuEvent;
 					while (mainScreen.pollEvent(menuEvent))
