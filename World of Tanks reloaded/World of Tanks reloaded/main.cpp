@@ -317,7 +317,7 @@ int main()
 	int opt = 1;
 	int harta = 1;
 	while (mainScreen.isOpen()) {
-		//mainScreen.setMouseCursorVisible(false);
+		mainScreen.setMouseCursorVisible(false);
 		if (opt == 1) {
 
 			sf::Event menuEvent;
@@ -634,8 +634,8 @@ int main()
 					opt = 1;
 				}
 				double chaserRotation = (double)chaser.rotationOfChaser();
-				//cout << "chaser rotation : " << chaserRotation << endl;
-				//cout << "rotation needed : " << rotationNeeded << endl << endl;
+
+
 				if (chaserLife > 0)
 				{
 					if (!chaser.isInMotion())
@@ -651,7 +651,6 @@ int main()
 							D = rotationNeeded - chaserRotation;
 							A = 360 - D;
 						}
-						//cout << " A " << A << "  D " << D << endl;
 						if (A > D && !okayGo)
 						{
 							okayGo = 1;
@@ -673,48 +672,35 @@ int main()
 					}
 					if (abs(chaserRotation - rotationNeeded) < 1.5 && !chaser.isInMotion())
 					{
-						//cout << "STOP ROTATING, YOU'RE ANNOYING ME! " << endl;
 						chaser.doNotRotate();
 						okayGo = 0;
-						/*cout << "coordinates of the tank, which didn't move AT ALL: " << tankX << "  " << tankY << endl;
-						cout << "coordinates of the CHASER, which should be where I put it " << chaser.getXorigin() << "  " << chaser.getYorigin() << endl;
-						cout << "chaser Rotation when it should stop " << chaserRotation << endl;
-						cout << "the rotation needed when it shoult stop " << rotationNeeded << endl;
-						cout << "the calculated path ";*/
 						path = chaser.pathToPlayer(tankX, tankY);
 						changePath = path;
-						//cout << path << "   and then   ";
-						//cout << path << endl;
 					}
 					if (chaser.isInMotion() && path != 0)
 					{
 						chaser.moveChaser('d', 0.15);
 						path--;
-						//cout << "the decreasing path : " << path << endl;
 					}
 					if (path < 0)
 					{
 						chaser.rotate();
 						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
 					}
-					else if ((changePath - path  > 0) && (changePath - path < 3)) // - changePath / 4
+					else if ((changePath - path  > 0) && (changePath - path < 3))
 					{
 						chaser.moveChaser('l', 0.2);
-						//cout << "change rotation now " << endl;
 						chaser.rotate();
 						tankX = mainTank.getXorigin();
 						tankY = mainTank.getYorigin();
 						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-						//cout << "rotation needed " << rotationNeeded << endl << "chaser rotaation " << chaser.rotationOfChaser() << endl;
 					}
-					//chaser fires (or not)
 					int x = rand() % 10;
-					if (x % 7 == 0 && 0)
+					if (x % 7 == 0)
 					{
 						chaser.moveChaser('r', 0.2);
 						chaser.rotate();
-						//x = rand() % 100;
-						if (chaserBullets[chaserCurrentBullet].isInFlight() != true)// && x % 7 == 0)
+						if (chaserBullets[chaserCurrentBullet].isInFlight() != true)
 						{
 							//the next section will calculate the direction in which the bullet is fired
 							float chaserXX = chaser.getXorigin();
@@ -730,149 +716,109 @@ int main()
 							}
 						}
 					}
-					//chaserX = chaser.getXorigin();
-					//chaserY = chaser.getYorigin();
-					//cout << "chaserX " << chaserX << " chaserY  " << chaserY << endl;
 				}
 				//-----------------------------chaser 2 try --------------------------------chaser 2 try--------------------------------chaser 2 try-----------
 				if (chaser2Life > 0)
 				{
-					//cout << "STOP ROTATING, YOU'RE ANNOYING ME! " << endl;
-					chaser.doNotRotate();
-					okayGo = 0;
-					/*cout << "coordinates of the tank, which didn't move AT ALL: " << tankX << "  " << tankY << endl;
-					cout << "coordinates of the CHASER, which should be where I put it " << chaser.getXorigin() << "  " << chaser.getYorigin() << endl;
-					cout << "chaser Rotation when it should stop " << chaserRotation << endl;
-					cout << "the rotation needed when it shoult stop " << rotationNeeded << endl;
-					cout << "the calculated path ";*/
-					path = chaser.pathToPlayer(tankX, tankY);
-					changePath = path;
-					//cout << path << "   and then   ";
-					//cout << path << endl;
-				}
-				if (chaser.isInMotion() && path != 0)
-				{
-					chaser.moveChaser('d', 0.2);
-					path--;
-					//cout << "the decreasing path : " << path << endl;
-				}
-				if (path < 0)
-				{
-					chaser.rotate();
-					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-				}
-				if ((changePath - path - changePath / 4 > 0) && (changePath - path - changePath / 4 < 3))
-				{
-					chaser.rotate();
-					rotationNeeded = chaser.rotationNeeded(tankX, tankY);
-				}
-
-				/*if (chaser2Rotation < rotationNeeded2 && !chaser.isInMotion() )
-				{
-				chaser2.moveChaser('l', 0.6);
-				}*/
-				if (!chaser2.isInMotion())
-				{
-					double A2, D2;
-					if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
+					if (!chaser2.isInMotion())
 					{
-						A2 = chaser2Rotation - rotationNeeded2;
-						D2 = 360 - A2;
+						double A2, D2;
+						if (chaser2Rotation > rotationNeeded2 && okayGo2 == 0)
+						{
+							A2 = chaser2Rotation - rotationNeeded2;
+							D2 = 360 - A2;
+						}
+						else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
+						{
+							D2 = rotationNeeded2 - chaser2Rotation;
+							A2 = 360 - D2;
+						}
+						if (A2 > D2 && !okayGo2)
+						{
+							okayGo2 = 1;
+						}
+						else if (A2 < D2 && !okayGo2)
+						{
+							okayGo2 = 2;
+						}
+						if (okayGo == 1)
+						{
+							chaser2.moveChaser('r', 1.5);
+							chaser2.rotate();
+						}
+						else if (okayGo2 == 2)
+						{
+							chaser2.moveChaser('l', 1.5);
+							chaser2.rotate();
+						}
 					}
-					else if (chaser2Rotation < rotationNeeded2 && okayGo2 == 0)
+					//------------------------------------------------DE AICI INCEPE RANDOM MOVEMENT------------------------------------------------------------------------
+					if (abs(chaser2Rotation - rotationNeeded2) < 1 && !chaser2.isInMotion())
 					{
-						D2 = rotationNeeded2 - chaser2Rotation;
-						A2 = 360 - D2;
-					}
-					//cout << " A2 " << A2 << "  D2 " << D2 << endl;
-					if (A2 > D2 && !okayGo2)
-					{
-						okayGo2 = 1;
-					}
-					else if (A2 < D2 && !okayGo2)
-					{
-						okayGo2 = 2;
-					}
-					if (okayGo == 1)
-					{
-						chaser2.moveChaser('r', 1.5);
-						chaser2.rotate();
-					}
-					else if (okayGo2 == 2)
-					{
-						chaser2.moveChaser('l', 1.5);
-						chaser2.rotate();
-					}
-				}
-				//------------------------------------------------DE AICI INCEPE RANDOM MOVEMENT------------------------------------------------------------------------
-				if (abs(chaser2Rotation - rotationNeeded2) < 1 && !chaser2.isInMotion())
-				{
-					if (chaser2Rotation < 100 && chaser2Rotation > 230 || (chaser2Rotation > 250 || chaser2Rotation < 20))
-					{
-						variabila = rand() % 1000;
-						while (variabila < 200)
+						if (chaser2Rotation < 100 && chaser2Rotation > 230 || (chaser2Rotation > 250 || chaser2Rotation < 20))
 						{
 							variabila = rand() % 1000;
+							while (variabila < 200)
+							{
+								variabila = rand() % 1000;
+							}
 						}
-					}
-					else
-					{
-						variabila = rand() % 400;
-						while (variabila < 200)
+						else
 						{
-							variabila = rand() % 500;
+							variabila = rand() % 400;
+							while (variabila < 200)
+							{
+								variabila = rand() % 500;
+							}
 						}
+						chaser2.doNotRotate();
 					}
-					//cout << "variabila : " << variabila << endl;
-					chaser2.doNotRotate();
-				}
-				if (variabila != 0 && chaser2.isInMotion() && variabila % 2 == 0)
-				{
-					chaser2.moveChaser('u', 1.5);
-					variabila -= 2;
-				}
-				else if (variabila % 2 == 1)
-				{
-					chaser2.moveChaser('d', 1.5);
-					if (variabila == 1)
+					if (variabila != 0 && chaser2.isInMotion() && variabila % 2 == 0)
 					{
-						variabila = 0;
-					}
-					else
-					{
+						chaser2.moveChaser('u', 1.5);
 						variabila -= 2;
 					}
-				}
-				if (variabila < 10)
-				{
-					//cout << "Se intampla si minuni. -----------------------" << endl;
-					chaser2.rotate();
-					okayGo2 = 0;
-					rotationNeeded2 = rand() % 360;
-					if (chaser2Rotation > rotationNeeded2)
+					else if (variabila % 2 == 1)
 					{
-						okayGo2 = 2;
-					}
-				}
-
-
-				int x = rand() % 11;
-				if (x % 10 == 0 && 0)
-				{
-					//x = rand() % 100;
-					if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)// && x % 7 == 0)
-					{
-						//the next section will calculate the direction in which the bullet is fired
-						float chaserXX = chaser2.getXorigin();
-						float chaserYY = chaser2.getYorigin();
-						chaser2.goodPoint(chaserXX, chaserYY);
-						double rotation = (double)chaser2.rotationOfChaser();
-						chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaserXX, chaserYY, chaserRotation, xOrigin, yOrigin, X, Y);
-						chaser2Bullets[chaser2CurrentBullet].shoot(chaserXX, chaserYY, xOrigin, yOrigin, chaserRotation);
-						chaser2CurrentBullet++;
-						if (chaser2CurrentBullet > 1)
+						chaser2.moveChaser('d', 1.5);
+						if (variabila == 1)
 						{
-							chaser2CurrentBullet = 0;
+							variabila = 0;
+						}
+						else
+						{
+							variabila -= 2;
+						}
+					}
+					if (variabila < 10)
+					{
+						chaser2.rotate();
+						okayGo2 = 0;
+						rotationNeeded2 = rand() % 360;
+						if (chaser2Rotation > rotationNeeded2)
+						{
+							okayGo2 = 2;
+						}
+					}
+
+
+					int x = rand() % 11;
+					if (x % 10 == 0)
+					{
+						if (chaser2Bullets[chaser2CurrentBullet].isInFlight() != true)
+						{
+							//the next section will calculate the direction in which the bullet is fired
+							float chaser2XX = chaser2.getXorigin();
+							float chaser2YY = chaser2.getYorigin();
+							chaser2.goodPoint(chaser2XX, chaser2YY);
+							double rotation = (double)chaser2.rotationOfChaser();
+							chaser2Bullets[chaser2CurrentBullet].thirdPoint(chaser2XX, chaser2YY, chaserRotation, xOrigin, yOrigin, X, Y);
+							chaser2Bullets[chaser2CurrentBullet].shoot(chaser2XX, chaser2YY, xOrigin, yOrigin, chaserRotation);
+							chaser2CurrentBullet++;
+							if (chaser2CurrentBullet > 1)
+							{
+								chaser2CurrentBullet = 0;
+							}
 						}
 					}
 				}
@@ -909,7 +855,7 @@ int main()
 						}
 					}
 				}
-				for (k = 0; k < 1 && chaserLife > 0; k++)
+				for (k = 0; k < 1 && chaser2Life > 0; k++)
 				{
 					if (chaser2Bullets[k].isInFlight())
 					{
@@ -928,7 +874,6 @@ int main()
 				healthLevel.setString(string1.str());
 				string2 << "Speed: " << tankSpeed << " KM/H";
 				SpeedTank.setString(string2.str());
-				mainTank.drawPlayer(mainScreen);
 				for (int i = 0; i <= nr; i++)
 					mainScreen.draw(obstacol[i]);
 

@@ -174,9 +174,11 @@ public:
 	}
 	void lessHealth()
 	{
-		currentHealth -= rand() % 26 + 5;
+		currentHealth -= rand() % 7 + 3;
 		if (currentHealth <= 0)
 			alive = false;
+		if (currentHealth < 0)
+			currentHealth = 0;
 	}
 	bool checkIfAlive()
 	{
