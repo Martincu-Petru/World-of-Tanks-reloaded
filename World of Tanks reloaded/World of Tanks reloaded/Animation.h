@@ -87,6 +87,7 @@ public:
 		if (ok)
 		{
 			explosionSprite.setScale(0.9f, 0.9f);
+			explosionSprite.setOrigin(explosionSprite.getTexture()->getSize().x*0.5, explosionSprite.getTexture()->getSize().y*0.5);
 			explosionSprite.setPosition(x, y);
 			screen.draw(explosionSprite);
 		}

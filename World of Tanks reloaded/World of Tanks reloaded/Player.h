@@ -15,7 +15,6 @@ public:
 		//Default constructor
 	}
 	Player(string imageName)
-
 	{
 		currentHealth = 100;
 		maxHealth = 100;
@@ -36,6 +35,11 @@ public:
 		playerSprite.setScale(0.25f, 0.25f);
 		screen.draw(playerSprite);
 	}
+	void setPostion()
+	{
+		playerSprite.setPosition(Vector2f(50, 70));
+		playerSprite.setRotation(180);
+	}
 	float getXorigin()
 	{
 		return playerSprite.getPosition().x;
@@ -46,7 +50,7 @@ public:
 	}
 	void movePlayer(char direction, int nr, Sprite obstacol[100])
 	{
-		if (playerSprite.getRotation() >= 270 || playerSprite.getRotation() <= 180)
+		//if (playerSprite.getRotation() >= 270 || playerSprite.getRotation() <= 180)
 		{
 			if (direction == 'u')
 			{
@@ -178,7 +182,7 @@ public:
 	}
 	void lessHealth()
 	{
-		currentHealth -= rand() % 7 + 3;
+		currentHealth -= 0.6;
 		if (currentHealth <= 0)
 			alive = false;
 		if (currentHealth < 0)
@@ -200,6 +204,7 @@ public:
 		currentHealth = 100;
 		speed = 0.15;
 		playerSprite.setRotation(0);
+		alive = true;
 	}
 	void goodPoint(float &x, float &y)
 	{
@@ -238,7 +243,7 @@ public:
 private:
 	Texture playerTexture;
 	Sprite playerSprite;
-	int currentHealth;
+	float currentHealth;
 	int maxHealth;
 	Time lastHit;
 	float speed;

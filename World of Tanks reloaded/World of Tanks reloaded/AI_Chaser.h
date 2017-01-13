@@ -42,6 +42,11 @@ public:
 			AI_ChaserSprite.move(Vector2f(1000, 800));
 			AI_ChaserSprite.setRotation(270);
 		}
+		else if (ok == 3)
+		{
+			AI_ChaserSprite.move(Vector2f(800, 600));
+			AI_ChaserSprite.setRotation(90);
+		}
 	}
 	void drawAI_Chaser(RenderWindow &screen, int ok)
 	{
@@ -51,6 +56,10 @@ public:
 			AI_ChaserSprite.setScale(0.25f, 0.25f);
 		}
 		else if (ok == 2)
+		{
+			AI_ChaserSprite.setScale(0.15f, 0.15f);
+		}
+		else if (ok == 3)
 		{
 			AI_ChaserSprite.setScale(0.15f, 0.15f);
 		}
@@ -89,7 +98,7 @@ public:
 	{
 		return AI_ChaserSprite.getRotation();
 	}
-	void moveChaser(char direction, float moveSpeed)
+	void moveChaser(char direction, float moveSpeed, int nr, Sprite obstacol[100])
 	{
 		if (direction == 'u')
 		{
@@ -110,6 +119,77 @@ public:
 					{
 						AI_ChaserSprite.rotate(-moveSpeed + 0.25);
 					}
+		/*if (direction == 'u')
+		{
+			float newSpeed = rand() % 1000; //marsarier
+			newSpeed /= 100000;
+			AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
+			for (int i = 0; i <= nr; i++)
+			{
+				if (AI_ChaserSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()) && AI_ChaserSprite.getRotation() >= 270)
+				{
+
+					if (AI_ChaserSprite.getPosition().x < obstacol[i].getPosition().x) {
+						AI_ChaserSprite.rotate(speed);
+						AI_ChaserSprite.rotate(speed);
+						AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+						break;
+					}
+					else
+					{
+						AI_ChaserSprite.rotate(-speed);
+						AI_ChaserSprite.rotate(-speed);
+						AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+						break;
+					}
+				}
+			}
+
+		}
+		else
+			if (direction == 'd') //merge in sus
+			{
+				float newSpeed = rand() % 1000;
+				newSpeed /= 100000;
+				AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+				for (int i = 0; i <= nr; i++)
+					if (AI_ChaserSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+					{
+						AI_ChaserSprite.rotate(-speed);
+						AI_ChaserSprite.rotate(-speed);
+						AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
+						break;
+					}
+			}
+			else
+				if (direction == 'l') //merge in dreapta
+				{
+					AI_ChaserSprite.rotate(speed);
+					for (int i = 0; i <= nr; i++)
+						if (AI_ChaserSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+						{
+							AI_ChaserSprite.rotate(-speed);
+							AI_ChaserSprite.rotate(-speed);
+							AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed));
+							AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed));
+							break;
+						}
+
+				}
+				else
+					if (direction == 'r')
+					{
+						AI_ChaserSprite.rotate(-speed);
+						for (int i = 0; i <= nr; i++)
+							if (AI_ChaserSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+							{
+
+								AI_ChaserSprite.rotate(speed);
+								AI_ChaserSprite.rotate(speed);
+								AI_ChaserSprite.move(sin(AI_ChaserSprite.getRotation()*3.14159265 / 180) * (speed), cos(AI_ChaserSprite.getRotation()*3.14159265 / 180)*-(speed));
+								break;
+							}
+					}*/
 		if (AI_ChaserSprite.getPosition().y + AI_ChaserSprite.getGlobalBounds().height * 0.5 > VideoMode::getDesktopMode().height)
 		{
 			AI_ChaserSprite.setPosition(Vector2f(AI_ChaserSprite.getPosition().x, VideoMode::getDesktopMode().height - AI_ChaserSprite.getGlobalBounds().height*0.5));
@@ -205,5 +285,18 @@ public:
 	{
 		return (AI_ChaserSprite.getGlobalBounds().intersects(entity.getGlobalBounds()));
 		//return (AI_ChaserSprite.getGlobalBounds().intersects())
+	}
+	void restart(int ok)
+	{
+		if (ok == 1)
+		{
+			AI_ChaserSprite.move(Vector2f(1000, 257.164));
+			AI_ChaserSprite.setRotation(180);
+		}
+		else if (ok == 2)
+		{
+			AI_ChaserSprite.move(Vector2f(1000, 800));
+			AI_ChaserSprite.setRotation(270);
+		}
 	}
 };

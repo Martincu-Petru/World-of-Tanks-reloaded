@@ -22,7 +22,7 @@
     <ProjectGuid>{2005DBF2-F0C2-4B9C-91BB-F86F56A90258}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>WorldofTanksreloaded</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
