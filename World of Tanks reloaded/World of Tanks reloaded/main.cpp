@@ -7,8 +7,7 @@
 #include <sstream> 
 #include "ai_Entity.h"
 #include "AI_Chaser.h"
-#include <stdlib.h>
-#include "menu.h"
+//#include <stdlib.h>
 #include <fstream>
 #include "Animation.h"
 using namespace sf;
@@ -38,10 +37,19 @@ Font textStyle;
 Text optiunea[4], optiuneaExit[3], optiuneaResume[3], optiuneaDif[5];
 
 bool matrix[14][23];
+int harta = 1;
 
-void citire()
+void citire(int harta)
 {
-	ifstream fi("mat.in");
+	ifstream fi;
+	if (harta == 1)
+		fi.open("mat.in");
+	else
+		if (harta == 2)
+			fi.open("mat2.in");
+		else
+			if (harta == 3)
+				fi.open("mat3.in");
 	for (int i = 0; i < 14; i++)
 		for (int j = 0; j < 23; j++)
 			fi >> matrix[i][j];
@@ -173,7 +181,7 @@ int main()
 	setOptionsExit();
 	resumeGame();
 	setOptionsDif();
-	citire();
+	citire(harta);
 	RenderWindow mainScreen(VideoMode(1366, 768), "World of Tanks reloaded", Style::Fullscreen);
 	Player mainTank("E-100.png");
 	Player secondTank("T34.png");
@@ -215,15 +223,25 @@ int main()
 	int currentBullet = 0, i;
 
 	Event Event;
-	Texture healthBarTexture, textureBackground, stone, planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture, CrateTexture;
+	Texture healthBarTexture, textureBackground,  planeTexture, plane2Texture, healthTexture, speedTexture, ammoTexture, menuTexture, menuBackgroundExitTexture, ResumeTexture;
 	Sprite HP, spriteBackground, stone0, plane, plane2, healthSprite, ammoSprite, speedSprite, menuBackground, menuExitBackground, resumeBackground;
-	CrateTexture.loadFromFile("crate.png");
+	
+	Texture CrateTexture;
+	if(harta==1)
+		CrateTexture.loadFromFile("crate.png");
+	else
+		if(harta==2)
+			CrateTexture.loadFromFile("crate_2.png");
+		else 
+			if(harta==3)
+				CrateTexture.loadFromFile("crate_3.png");
 	Sprite obstacol[100];
 	for (int i = 0; i < 100; i++)
 	{
 		obstacol[i].scale(Vector2f(0.3, 0.3));
 		obstacol[i].setTexture(CrateTexture);
 	}
+
 	int nr = -1;
 	for (int i = 0; i<14; i++)
 		for (int j = 0; j<23; j++)
@@ -249,7 +267,6 @@ int main()
 	healthBarTexture.loadFromFile("HP.png");
 	planeTexture.loadFromFile("Ao192.png");
 	textureBackground.loadFromFile("intro.jpg");
-	stone.loadFromFile("stone.png");
 	plane2Texture.loadFromFile("Bf110e.png");
 	fontHealth.loadFromFile("Font.ttf");
 
@@ -261,7 +278,6 @@ int main()
 	speedSprite.setTexture(speedTexture);
 	HP.setTexture(healthBarTexture);
 	spriteBackground.setTexture(textureBackground);
-	stone0.setTexture(stone);
 	plane.setTexture(planeTexture);
 	plane2.setTexture(plane2Texture);
 
@@ -297,12 +313,11 @@ int main()
 	SpeedTank.setCharacterSize(30);
 	SpeedTank.setFillColor(Color::White);
 
-	menu meniu;
-
 	Clock timeGone;
 	int opt = 1;
+	int harta = 1;
 	while (mainScreen.isOpen()) {
-		mainScreen.setMouseCursorVisible(false);
+		//mainScreen.setMouseCursorVisible(false);
 		if (opt == 1) {
 
 			sf::Event menuEvent;
@@ -559,42 +574,13 @@ int main()
 				healthBar.setSize(Vector2f(mainTank.getHealth()*2.6, 30));
 
 				//mainAI.BuildPathToTarget(mainTank.getXorigin(), mainTank.getYorigin());
-
-				//first we have to handle the player's input
-				if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
-				{
-					//	cout << endl << " DA " << endl;
-					mainTank.movePlayer('u'); //era 1.5 peste tot dar tancul se misca prea repede
-					tankSpeed = rand() % 1000;
-					tankSpeed /= 1000;
-					tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
-					srand(time(0));
-					tankSpeed += rand() % 5;
-				}
-				else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
-				{
-					mainTank.movePlayer('l');
-				}
-				else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
-				{
-					mainTank.movePlayer('r');
-				}
-				else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
-				{
-					mainTank.movePlayer('d');
-					tankSpeed = rand() % 1000;
-					tankSpeed /= 1000;
-					tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
-					srand(time(0));
-					tankSpeed += rand() % 5;
-				}
 				if (mainTank.checkIfAlive())
 				{
 					//first we have to handle the player's input
 					if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down))
 					{
 						//	cout << endl << " DA " << endl;
-						mainTank.movePlayer('u'); //era 1.5 peste tot dar tancul se misca prea repede
+						mainTank.movePlayer('u', nr, obstacol); //era 1.5 peste tot dar tancul se misca prea repede
 						tankSpeed = rand() % 1000;
 						tankSpeed /= 1000;
 						tankSpeed = tankSpeed - mainTank.getSpeed() * 300;
@@ -603,15 +589,15 @@ int main()
 					}
 					else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right))
 					{
-						mainTank.movePlayer('l');
+						mainTank.movePlayer('l', nr, obstacol);
 					}
 					else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left))
 					{
-						mainTank.movePlayer('r');
+						mainTank.movePlayer('r', nr, obstacol);
 					}
 					else if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up))
 					{
-						mainTank.movePlayer('d');
+						mainTank.movePlayer('d', nr, obstacol);
 						tankSpeed = rand() % 1000;
 						tankSpeed /= 1000;
 						tankSpeed = tankSpeed + mainTank.getSpeed() * 300;
@@ -890,7 +876,6 @@ int main()
 						}
 					}
 				}
-				}
 
 				// Actualizarea pt bullets in-flight
 				for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
@@ -1087,7 +1072,8 @@ int main()
 				mainScreen.draw(plane2);
 				mainScreen.display();
 			}
-			else if (opt == 4)
+			else 
+				if (opt == 4)
 				{
 					sf::Event menuEvent;
 					while (mainScreen.pollEvent(menuEvent))
