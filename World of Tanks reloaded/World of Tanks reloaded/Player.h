@@ -15,6 +15,7 @@ public:
 		//Default constructor
 	}
 	Player(string imageName)
+
 	{
 		currentHealth = 100;
 		maxHealth = 100;
@@ -45,66 +46,78 @@ public:
 	}
 	void movePlayer(char direction, int nr, Sprite obstacol[100])
 	{
-		//cazul tanc cu tunul in susul ecranului
-		if (direction == 'u')
+		if (playerSprite.getRotation() >= 270 || playerSprite.getRotation() <= 90)
 		{
-			float newSpeed = rand() % 1000; //marsarier
-			newSpeed /= 100000;
-			playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
-			for (int i = 0; i <= nr; i++)
-				if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
-				{
-					playerSprite.rotate(speed);
-					playerSprite.rotate(speed);
-					playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
-					break;
-				}
-
-		}
-		else
-			if (direction == 'd') //merge in sus
+			if (direction == 'u')
 			{
-				float newSpeed = rand() % 1000;
+				float newSpeed = rand() % 1000; //marsarier
 				newSpeed /= 100000;
-				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
 				for (int i = 0; i <= nr; i++)
 					if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
 					{
-						playerSprite.rotate(-speed);
-						playerSprite.rotate(-speed);
-						playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
-						break;
+
+						if (playerSprite.getPosition().x < obstacol[i].getPosition().x) {
+							playerSprite.rotate(speed);
+							playerSprite.rotate(speed);
+							playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+							break;
+						}
+						else
+						{
+							playerSprite.rotate(-speed);
+							playerSprite.rotate(-speed);
+							playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
+							break;
+						}
 					}
+
 			}
 			else
-				if (direction == 'l') //merge in dreapta
+				if (direction == 'd') //merge in sus
 				{
-					playerSprite.rotate(speed);
+					float newSpeed = rand() % 1000;
+					newSpeed /= 100000;
+					playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed));
 					for (int i = 0; i <= nr; i++)
 						if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
 						{
 							playerSprite.rotate(-speed);
 							playerSprite.rotate(-speed);
-							playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed));
-							playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed));
+							playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
 							break;
 						}
-
 				}
 				else
-					if (direction == 'r')
+					if (direction == 'l') //merge in dreapta
 					{
-						playerSprite.rotate(-speed);
+						playerSprite.rotate(speed);
 						for (int i = 0; i <= nr; i++)
 							if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
 							{
-
-								playerSprite.rotate(speed);
-								playerSprite.rotate(speed);
+								playerSprite.rotate(-speed);
+								playerSprite.rotate(-speed);
+								playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed));
 								playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed));
 								break;
 							}
+
 					}
+					else
+						if (direction == 'r')
+						{
+							playerSprite.rotate(-speed);
+							for (int i = 0; i <= nr; i++)
+								if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+								{
+
+									playerSprite.rotate(speed);
+									playerSprite.rotate(speed);
+									playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180) * (speed), cos(playerSprite.getRotation()*3.14159265 / 180)*-(speed));
+									break;
+								}
+						}
+		}
 		if (playerSprite.getPosition().y + playerSprite.getGlobalBounds().height*0.5 > VideoMode::getDesktopMode().height)
 			playerSprite.setPosition(Vector2f(playerSprite.getPosition().x, VideoMode::getDesktopMode().height - playerSprite.getGlobalBounds().height*0.5));
 

@@ -1,23 +1,24 @@
 ﻿  main.cpp
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(21): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(51): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(67): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(69): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(75): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(88): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(89): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(104): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(109): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(112): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(115): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(118): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(175): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(182): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(187): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(192): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(22): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(63): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(70): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(79): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(100): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(101): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(116): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(122): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(125): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(128): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(131): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(188): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(195): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(200): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\player.h(205): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\bullet.h(156): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\bullet.h(193): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petru\documents\github\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\bullet.h(217): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
