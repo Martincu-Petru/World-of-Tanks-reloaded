@@ -46,7 +46,7 @@ public:
 	}
 	void movePlayer(char direction, int nr, Sprite obstacol[100])
 	{
-		if (playerSprite.getRotation() >= 270 || playerSprite.getRotation() <= 90)
+		if (playerSprite.getRotation() >= 270 || playerSprite.getRotation() <= 180)
 		{
 			if (direction == 'u')
 			{
@@ -54,7 +54,8 @@ public:
 				newSpeed /= 100000;
 				playerSprite.move(sin(playerSprite.getRotation()*3.14159265 / 180)*-(speed + newSpeed), cos(playerSprite.getRotation()*3.14159265 / 180) * (speed + newSpeed));
 				for (int i = 0; i <= nr; i++)
-					if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()))
+				{
+					if (playerSprite.getGlobalBounds().intersects(obstacol[i].getGlobalBounds()) && playerSprite.getRotation() >= 270) 
 					{
 
 						if (playerSprite.getPosition().x < obstacol[i].getPosition().x) {
@@ -71,6 +72,7 @@ public:
 							break;
 						}
 					}
+				}
 
 			}
 			else
@@ -118,6 +120,8 @@ public:
 								}
 						}
 		}
+		
+		
 		if (playerSprite.getPosition().y + playerSprite.getGlobalBounds().height*0.5 > VideoMode::getDesktopMode().height)
 			playerSprite.setPosition(Vector2f(playerSprite.getPosition().x, VideoMode::getDesktopMode().height - playerSprite.getGlobalBounds().height*0.5));
 
@@ -230,6 +234,7 @@ public:
 			x = xA + r;
 		}
 	}
+	
 private:
 	Texture playerTexture;
 	Sprite playerSprite;

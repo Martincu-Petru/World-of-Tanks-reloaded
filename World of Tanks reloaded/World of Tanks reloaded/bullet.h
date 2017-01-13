@@ -255,4 +255,18 @@ public:
 	{
 		bullet.setRotation(rotation);
 	}
+	bool intersect(Sprite obstacle[100], int nr)
+	{
+		for (int i = 0; i <= nr; i++)
+		{
+			if (bullet.getGlobalBounds().intersects(obstacle[i].getGlobalBounds()) == 1)
+			{
+				//cout << "da ";
+				return true;
+			}
+
+		}
+		//cout << "nope ";
+		return false;
+	}
 };

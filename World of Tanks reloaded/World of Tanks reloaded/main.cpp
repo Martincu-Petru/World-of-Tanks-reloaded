@@ -700,7 +700,7 @@ int main()
 						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
 					}
 					int x = rand() % 10;
-					if (x % 7 == 0)
+					if (x % 7 == 0 && 0)
 					{
 						chaser.moveChaser('r', 0.2);
 						chaser.rotate();
@@ -830,6 +830,7 @@ int main()
 				// Actualizarea pt bullets in-flight
 				for (i = 0; i < playerNumberBullets && mainTank.checkIfAlive(); i++)
 				{
+					
 					if (bullets[i].isInFlight())
 					{
 						bullets[i].update(0.15);
@@ -841,6 +842,10 @@ int main()
 						else if (chaser2.checkIfIntersect(bullets[i].getShape()) && chaser2Life > 0)
 						{
 							chaser2Life--;
+							bullets[i].stop();
+						}
+						if (bullets[i].intersect(obstacol, nr))
+						{
 							bullets[i].stop();
 						}
 					}
