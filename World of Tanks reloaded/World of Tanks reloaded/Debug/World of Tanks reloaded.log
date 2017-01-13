@@ -86,7 +86,7 @@ c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\worl
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(820): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(836): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(859): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(871): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(877): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\lucia\source\repos\world-of-tanks-reloaded\world of tanks reloaded\world of tanks reloaded\main.cpp(225): warning C4101: 'Event': unreferenced local variable
   World of Tanks reloaded.vcxproj -> C:\Users\lucia\Source\Repos\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.exe
   World of Tanks reloaded.vcxproj -> C:\Users\lucia\Source\Repos\World-of-Tanks-reloaded\World of Tanks reloaded\Debug\World of Tanks reloaded.pdb (Full PDB)

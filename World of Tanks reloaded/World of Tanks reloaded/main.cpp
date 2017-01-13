@@ -700,7 +700,7 @@ int main()
 						rotationNeeded = chaser.rotationNeeded(tankX, tankY);
 					}
 					int x = rand() % 10;
-					if (x % 7 == 0 && 0)
+					if (x % 7 == 0 )
 					{
 						chaser.moveChaser('r', 0.2);
 						chaser.rotate();
@@ -857,9 +857,15 @@ int main()
 					if (chaserBullets[j].isInFlight())
 					{
 						chaserBullets[j].update(0.15);
-						if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive())
+						int oki = 1;
+						
+						if (mainTank.checkIfIntersect(chaserBullets[j].getShape()) && mainTank.checkIfAlive() && oki)
 						{
 							mainTank.lessHealth();
+							chaserBullets[j].stop();
+						}
+						if (chaserBullets[j].intersect(obstacol, nr))
+						{
 							chaserBullets[j].stop();
 						}
 					}
@@ -869,6 +875,10 @@ int main()
 					if (chaser2Bullets[k].isInFlight())
 					{
 						chaser2Bullets[k].update(0.15);
+						if (chaser2Bullets[k].intersect(obstacol, nr))
+						{
+							chaser2Bullets[k].stop();
+						}
 						if (mainTank.checkIfIntersect(chaser2Bullets[k].getShape()) && mainTank.checkIfAlive())
 						{
 							mainTank.lessHealth();

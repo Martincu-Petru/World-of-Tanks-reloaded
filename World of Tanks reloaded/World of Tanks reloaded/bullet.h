@@ -259,14 +259,11 @@ public:
 	{
 		for (int i = 0; i <= nr; i++)
 		{
-			if (bullet.getGlobalBounds().intersects(obstacle[i].getGlobalBounds()) == 1)
+			if (bullet.getGlobalBounds().intersects(obstacle[i].getGlobalBounds()))
 			{
-				//cout << "da ";
 				return true;
 			}
-
 		}
-		//cout << "nope ";
 		return false;
 	}
 };
